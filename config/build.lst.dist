@@ -1,0 +1,204 @@
+#/**
+# * Comment files below to remove from build
+# * NOTE: Pathes are relative to `./src/` directory
+# */
+
+#/**
+# * Header
+# */
+header/echo_hero.sh
+000_header.sh
+001_global-variables.sh
+002_colors.sh
+#003_clipboard.sh
+004_general-aliases.sh
+
+#/**
+# * Docker
+# */
+docker/docker-clean.sh
+docker/docker-exec.sh
+docker/docker-kill.sh
+docker/docker-list.sh
+docker/docker-restart.sh
+docker/docker-shell.sh
+docker/docker-status.sh
+docker/docker-stop.sh
+
+#/**
+# * Git
+# */
+git/add.sh
+git/amend.sh
+git/backup.sh
+git/bitbucket.sh
+git/branch-exists.sh
+git/branch.sh
+git/clone.sh
+git/commit.sh
+git/config.sh
+git/dashboard.sh
+git/delete-github-workflows.sh
+git/gdiff.sh
+git/git-aliases.sh
+git/greset.sh
+git/gstatus.sh
+git/guser.sh
+git/init.sh
+git/lbranches.sh
+git/list-bitbucket.sh
+git/list-github.sh
+git/lremote.sh
+git/merge.sh
+git/pull.sh
+git/push.sh
+git/rebase.sh
+#git/reclone.sh
+git/remote.sh
+git/stash.sh
+git/tag.sh
+#git/toplevel.sh
+
+#/**
+# * Multimedia
+# */
+multimedia/mp3-update-tag.sh
+multimedia/picture-list-exif.sh
+multimedia/picture-organize.sh
+multimedia/picture-rename-to-datetime.sh
+multimedia/picture-update-datetime.sh
+multimedia/play.sh
+
+#/**
+# * Network
+# */
+network/check-dns.sh
+network/get-ip.sh
+network/hosts.sh
+#network/mount-nfs.sh
+#network/mysql.sh
+network/network-aliases.sh
+network/ping-scan.sh
+network/port-redirect.sh
+network/port-scan.sh
+network/quick-scan.sh
+network/set-hosts.sh
+#network/unmount-nfs.sh
+network/unset-host.sh
+network/wifi-get-bssids.sh
+network/wifi-managed-mode.sh
+network/wifi-monitor-mode.sh
+network/wifi-radar.sh
+
+#/**
+# * Php
+# */
+php/php-server.sh
+php/set-php-version.sh
+php/storm.sh
+
+#/**
+# * Python
+# */
+python/py-server.sh
+python/python-aliases.sh
+
+#/**
+# * Security
+# */
+security/change-mac-address.sh
+security/netcat-listen.sh
+security/reverse-shell.sh
+security/wifi-deauth.sh
+security/wifi-fakeauth.sh
+security/wifi-sniff.sh
+
+#/**
+# * ssh
+# */
+ssh/switch_default_id.sh
+
+#/**
+# * Strings
+# */
+#strings/echo_box.sh
+#strings/string-aliases.sh
+#strings/urldecode.sh
+#strings/urlencode.sh
+
+#/**
+# * Symfony
+# */
+symfony/sf-dump-server.sh
+symfony/sf-lint.sh
+#symfony/sf-nuke.sh
+#symfony/sf-rebuild.sh
+symfony/sf-server.sh
+symfony/sf-tests.sh
+symfony/sf.sh
+#symfony/symfony-aliases.sh
+
+#/**
+# * System
+# */
+system/bootable-iso.sh
+system/codename.sh
+system/create-user.sh
+system/distribution.sh
+system/drives.sh
+system/own.sh
+system/pkg-install.sh
+system/pkg-installed.sh
+system/pkg-list.sh
+system/pkg-remove.sh
+system/pkg-search.sh
+system/symlink.sh
+system/system-aliases.sh
+system_dependant/clear-chrome-cache.sh
+system_dependant/gnome-aliases.sh
+system_dependant/open.sh
+system_dependant/system-dependant-aliases.sh
+
+#/**
+# * Tangoman
+# */
+tangoman/tango-config.sh
+tangoman/tango-doc.sh
+tangoman/tango-info.sh
+tangoman/tango-reload.sh
+tangoman/tango-update.sh
+
+#/**
+# * Utils
+# */
+utils/archive.sh
+utils/cheat.sh
+utils/clean-folder.sh
+utils/compress.sh
+utils/create-desktop-shortcut.sh
+utils/decode.sh
+utils/encode.sh
+utils/exists.sh
+utils/extract-archives.sh
+utils/help.sh
+utils/move-all-files-here.sh
+utils/random-string.sh
+utils/rename-script-generator.sh
+utils/rename.sh
+utils/search.sh
+utils/size.sh
+utils/strreplace.sh
+#utils/url-to-markdown.sh
+
+            
+
+#/**
+# * Web
+# */
+web/giphy.sh
+web/github.sh
+web/google.sh
+web/lmgtfy.sh
+web/trends.sh
+web/web-aliases.sh
+web/youtube.sh

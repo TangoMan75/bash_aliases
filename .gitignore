@@ -1,0 +1,4 @@
+.bash_aliases
+/config/build.lst
+/config/config.yaml
+src/000_header.sh

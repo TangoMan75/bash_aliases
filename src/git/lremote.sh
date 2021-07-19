@@ -1,0 +1,14 @@
+#!/bin/bash
+
+## List remote git branches
+function lremote() {
+    # Check git installation
+    if [ ! -x "$(command -v git)" ]; then
+        echo_error 'git required, enter: "sudo apt-get install -y git" to install'
+        return 1
+    fi
+
+    echo_info 'git remote -v'
+    git remote -v
+    echo
+}

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#--------------------------------------------------
+# header
+#--------------------------------------------------
+
+# This code is generated at build, do not edit.
+
+echo_hero
+
+# app version (set from latest git tag)
+# shellcheck disable=SC2034
+APP_VERSION=unknown_version
+
+# app installation directory
+# shellcheck disable=SC2034
+APP_INSTALL_DIR=unknown_installation_directory
+
+# app source repository
+# shellcheck disable=SC2034
+APP_REPOSITORY=unknown_app_source_repository
+
+#--------------------------------------------------
+# git variables
+#--------------------------------------------------
+
+# This code is generated, do not edit.
+# See: "./config/config.yaml" to change values.
+
+# Default git server
+# shellcheck disable=SC2034
+GIT_SERVER=default_git_server
+
+# Default git username
+# shellcheck disable=SC2034
+GIT_USERNAME=default_git_username
+
+# Use SSH
+# shellcheck disable=SC2034
+GIT_SSH=false
