@@ -4,6 +4,7 @@
 # general aliases
 #--------------------------------------------------
 
+alias s='subl'                                                              ## open with sublime text
 alias cc='clear'                                                            ## clear terminal
 alias ccc='clear && history -c'                                             ## clear terminal & history
 alias h='echo_info "history"; history'                                      ## history
