@@ -1,0 +1,78 @@
+#!/bin/bash
+
+## Generate random string
+function random-string() {
+    function _usage() {
+        echo_success 'usage:' "$1" "$2"; echo_primary 'random-string [length] -v (verbose) -h (help)\n'
+    }
+
+    #--------------------------------------------------
+    # Variables
+    #--------------------------------------------------
+
+    local length
+    local verbose=false
+
+    #--------------------------------------------------
+    # Parse arguments
+    #--------------------------------------------------
+
+    local arguments=()
+    local OPTARG
+    local option
+    while [ "$#" -gt 0 ]; do
+        OPTIND=0
+        while getopts :vh option; do
+            case "${option}" in
+                v) verbose=true;;
+                h) echo_warning 'random-string\n';
+                    echo_success 'description:' 2 14; echo_primary 'Generate random string\n'
+                    _usage 2 14
+                    return 0;;
+                \?) echo_error "invalid option \"${OPTARG}\"\n"
+                    return 1;;
+            esac
+        done
+        if [ "${OPTIND}" -gt 1 ]; then
+            shift $(( OPTIND-1 ))
+        fi
+        if [ "${OPTIND}" -eq 1 ]; then
+            arguments+=("$1")
+            shift
+        fi
+    done
+
+    #--------------------------------------------------
+
+    if [ "${#arguments[@]}" -eq 0 ]; then
+        echo_error 'some mandatory parameter is missing\n'
+        _usage 2 8
+        return 1
+    fi
+
+    if [ "${#arguments[@]}" -gt 1 ]; then
+        echo_error "too many arguments ($#)\n"
+        _usage 2 8
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Get argument
+    #--------------------------------------------------
+
+    length=${arguments[${LBOUND}]}
+
+    #--------------------------------------------------
+
+    if [[ ! "${length}" =~ [0-9] ]]; then
+        echo_error "invalid argument ($1)\n"
+        _usage 2 8
+        return 1
+    fi
+
+    if [ "${verbose}" = true ]; then
+        echo_info "< /dev/urandom tr -dc 'a-zA-Z0-9' | fold -w \"${length}\" | head -n 1\n"
+    fi
+
+    < /dev/urandom tr -dc 'a-zA-Z0-9' | fold -w "${length}" | head -n 1
+}
