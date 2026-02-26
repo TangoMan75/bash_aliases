@@ -1,0 +1,204 @@
+#/**
+# * This file is part of TangoMan Bash Aliases package.
+# *
+# * Copyright (c) 2026 "Matthias Morin" <mat@tangoman.io>
+# *
+# * This source file is subject to the MIT license that is bundled
+# * with this source code in the file LICENSE.
+# */
+
+#/**
+# * Comment files below to remove from build
+# */
+
+# _header
+./src/bash/_header/_001_header.sh
+./src/bash/_header/_002_global_variables.sh
+./src/bash/_header/_colors.sh
+./src/bash/_header/_hero.sh
+./src/bash/_header/create_env.sh
+./src/bash/_header/load_env.sh
+./src/bash/_header/set_var.sh
+
+# _tangoman
+./src/bash/_tangoman/tango-help.sh
+./src/bash/_tangoman/tango-info.sh
+./src/bash/_tangoman/tango-reload.sh
+./src/bash/_tangoman/tango-update.sh
+
+# aliases
+./src/bash/aliases/aliases.sh
+
+# dev
+./src/bash/dev/_list_ides.sh
+./src/bash/dev/open-in-ide.sh
+
+# docker
+./src/bash/docker/docker-clean.sh
+./src/bash/docker/docker-exec.sh
+./src/bash/docker/docker-kill.sh
+./src/bash/docker/docker-list.sh
+./src/bash/docker/docker-restart.sh
+./src/bash/docker/docker-shell.sh
+./src/bash/docker/docker-status.sh
+./src/bash/docker/docker-stop.sh
+
+# git
+./src/bash/git/_001_git-global-variables.sh
+./src/bash/git/_002_git-config.sh
+./src/bash/git/_branch_exists.sh
+./src/bash/git/_commit_exists.sh
+./src/bash/git/_format_conventional_entries.sh
+./src/bash/git/_get_current_branch.sh
+./src/bash/git/_get_main_branch.sh
+./src/bash/git/_git-aliases.sh
+./src/bash/git/_is_cherry_pick_in_progress.sh
+./src/bash/git/_is_rebase_in_progress.sh
+./src/bash/git/_parse_conventional_branch.sh
+./src/bash/git/_parse_conventional_commit.sh
+./src/bash/git/_pick_branch.sh
+./src/bash/git/_pick_commit.sh
+./src/bash/git/_pick_repository.sh
+./src/bash/git/_print_jira_url.sh
+./src/bash/git/add.sh
+./src/bash/git/aliases.sh
+./src/bash/git/amend.sh
+./src/bash/git/blame.sh
+./src/bash/git/branch.sh
+./src/bash/git/checkout.sh
+./src/bash/git/clean-unreachable.sh
+./src/bash/git/clone.sh
+./src/bash/git/commit.sh
+./src/bash/git/conventional-branch.sh
+./src/bash/git/conventional-commit.sh
+./src/bash/git/delete-github-workflows.sh
+./src/bash/git/fetch.sh
+./src/bash/git/gabort.sh
+./src/bash/git/gcontinue.sh
+./src/bash/git/gdiff.sh
+./src/bash/git/get_url.sh
+./src/bash/git/greset.sh
+./src/bash/git/gstatus.sh
+./src/bash/git/guser.sh
+./src/bash/git/init.sh
+./src/bash/git/list-bitbucket.sh
+./src/bash/git/list-github.sh
+./src/bash/git/log.sh
+./src/bash/git/lremote.sh
+./src/bash/git/merge.sh
+./src/bash/git/open-commit-in-ide.sh
+./src/bash/git/pick.sh
+./src/bash/git/pull.sh
+./src/bash/git/push.sh
+./src/bash/git/rebase.sh
+./src/bash/git/reflog.sh
+./src/bash/git/reinit.sh
+./src/bash/git/remote.sh
+./src/bash/git/show.sh
+./src/bash/git/stash.sh
+./src/bash/git/tag.sh
+
+# multimedia
+./src/bash/multimedia/convert-md.sh
+./src/bash/multimedia/convert-to-mp3.sh
+./src/bash/multimedia/mp3-rename-from-tag.sh
+./src/bash/multimedia/mp3-update-tag.sh
+./src/bash/multimedia/picture-get-names.sh
+./src/bash/multimedia/picture-jpeg-optimize.sh
+./src/bash/multimedia/picture-list-exif.sh
+./src/bash/multimedia/picture-organize.sh
+./src/bash/multimedia/picture-png2jpg.sh
+./src/bash/multimedia/picture-rename-to-datetime.sh
+./src/bash/multimedia/picture-resize.sh
+./src/bash/multimedia/picture-update-datetime.sh
+./src/bash/multimedia/play.sh
+./src/bash/multimedia/rename-extension-to-codec.sh
+
+# network
+./src/bash/network/_network-aliases.sh
+./src/bash/network/check-dns.sh
+./src/bash/network/external-ip.sh
+./src/bash/network/hosts.sh
+./src/bash/network/list-adapters.sh
+./src/bash/network/mount-nfs.sh
+./src/bash/network/port-redirect.sh
+./src/bash/network/scan.sh
+./src/bash/network/set-hosts.sh
+./src/bash/network/unmount-nfs.sh
+./src/bash/network/wifi-get-bssids.sh
+./src/bash/network/wifi-managed-mode.sh
+./src/bash/network/wifi-monitor-mode.sh
+./src/bash/network/wifi-radar.sh
+
+# php
+./src/bash/php/php-server.sh
+./src/bash/php/set-php-version.sh
+
+# python
+./src/bash/python/_python-aliases.sh
+./src/bash/python/py-server.sh
+
+# security
+./src/bash/security/change-mac-address.sh
+./src/bash/security/netcat-listen.sh
+./src/bash/security/reverse-shell.sh
+./src/bash/security/wifi-deauth.sh
+./src/bash/security/wifi-fakeauth.sh
+./src/bash/security/wifi-sniff.sh
+
+# ssh
+./src/bash/ssh/switch-default-ssh.sh
+
+# strings
+./src/bash/strings/_string-aliases.sh
+./src/bash/strings/decode.sh
+./src/bash/strings/encode.sh
+./src/bash/strings/random-string.sh
+./src/bash/strings/urldecode.sh
+./src/bash/strings/urlencode.sh
+
+# symfony
+./src/bash/symfony/_sf.sh
+./src/bash/symfony/_symfony-aliases.sh
+./src/bash/symfony/sf-dump-server.sh
+./src/bash/symfony/sf-server.sh
+
+# system
+./src/bash/system/_system-aliases.sh
+./src/bash/system/backup.sh
+./src/bash/system/create-user.sh
+./src/bash/system/drives.sh
+./src/bash/system/flash-bootable-iso.sh
+./src/bash/system/mod.sh
+./src/bash/system/own.sh
+./src/bash/system/pkg-install.sh
+./src/bash/system/pkg-installed.sh
+./src/bash/system/pkg-list.sh
+./src/bash/system/pkg-remove.sh
+./src/bash/system/pkg-search.sh
+./src/bash/system/symlink.sh
+
+# system_dependant
+./src/bash/system_dependant/_system-dependant-aliases.sh
+./src/bash/system_dependant/open.sh
+./src/bash/system_dependant/set_xdg_current_project_dir.sh
+
+# utils
+./src/bash/utils/change-extensions.sh
+./src/bash/utils/cheat.sh
+./src/bash/utils/clean-folder.sh
+./src/bash/utils/compress.sh
+./src/bash/utils/create-desktop-shortcut.sh
+./src/bash/utils/extract.sh
+./src/bash/utils/help.sh
+./src/bash/utils/move-all-files-here.sh
+./src/bash/utils/rename-script-generator.sh
+./src/bash/utils/rename.sh
+./src/bash/utils/size.sh
+
+# web
+./src/bash/web/get_youtube_rss.sh
+./src/bash/web/github.sh
+./src/bash/web/google.sh
+./src/bash/web/youtube.sh
+
