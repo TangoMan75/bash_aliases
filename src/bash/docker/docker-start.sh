@@ -1,12 +1,11 @@
 #!/bin/bash
 
-alias dkl='docker-kill'   ## docker-kill alias
-alias dkill='docker-kill' ## docker-kill alias
+alias dstart='docker-start' ## docker-start alias
 
-## Kill running containers (interactive)
-function docker-kill() {
+## start container (interactive)
+function docker-start() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-kill (container) -a (all) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-start (container) -a (all) -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -29,8 +28,9 @@ function docker-kill() {
         while getopts :ah option; do
             case "${option}" in
                 a) all=true;;
-                h) _echo_warning 'docker-kill\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Kill running containers (interactive)\n'
+                h) _echo_warning 'docker-start\n';
+                    _echo_success 'description:' 2 14; _echo_primary 'start container (interactive)\n'
+                    _usage 2 14
                     return 0;;
                 :) _echo_danger "error: \"${OPTARG}\" requires value\n"
                     return 1;;
@@ -71,9 +71,9 @@ function docker-kill() {
     #--------------------------------------------------
 
     if [ "${all}" = true ]; then
-        _echo_info "docker kill $(docker ps --format '{{.Names}}' | tr -s "\n" ' ')\n"
+        _echo_info "docker start $(docker ps --filter 'status=exited' --format '{{.Names}}' | tr -s "\n" ' ')\n"
         # shellcheck disable=SC2046
-        docker kill $(docker ps --format '{{.Names}}')
+        docker start $(docker ps --filter 'status=exited' --format '{{.Names}}')
 
         return 0
     fi
@@ -92,10 +92,10 @@ function docker-kill() {
         # copy command result to "containers" array
         while IFS='' read -r LINE; do
             containers+=("${LINE}");
-        done < <(docker ps --format '{{.Names}}')
+        done < <(docker ps --filter 'status=exited' --format '{{.Names}}')
 
         if [ -z "${containers[${LBOUND}]}" ]; then
-            _echo_danger 'error: No running container found\n'
+            _echo_danger 'error: No container found\n'
             return 1;
         fi
 
@@ -120,6 +120,6 @@ function docker-kill() {
     # Execute command
     #--------------------------------------------------
 
-    _echo_info "docker kill \"${container}\"\n"
-    docker kill "${container}"
+    _echo_info "docker start \"${container}\"\n"
+    docker start "${container}"
 }

@@ -14,5 +14,6 @@ function pkg-remove() {
     #--------------------------------------------------
 
     _echo_info "sudo apt-get remove -y \"$1\"\n"
+    # shellcheck disable=SC2033
     sudo apt-get remove -y "$1"
 }

@@ -1,8 +1,9 @@
 #!/bin/bash
 
-alias dsh='docker-shell' ## docker-shell alias
+alias dsh='docker-shell'    ## docker-shell alias
+alias dshell='docker-shell' ## docker-shell alias
 
-## Enter interactive shell inside container (interactive)
+## Enter interactive shell inside container
 function docker-shell() {
     function _usage() {
         _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-shell (container) [-u user] -S [shell] -a (ash) -b (bash) -c (csh) -d (dash) -k (ksh) -s (sh) -t (tcsh) -z (zsh) -h (help)\n'

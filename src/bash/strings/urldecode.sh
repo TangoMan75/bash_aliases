@@ -1,9 +1,9 @@
 #!/bin/bash
 
-## Decode string froml URL format
+## Decode string from URL format
 function urldecode() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urldecode -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urldecode [string] -h (help)\n'
     }
 
     #--------------------------------------------------

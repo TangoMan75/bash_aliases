@@ -1,11 +1,11 @@
 #!/bin/bash
 
-alias drt='docker-restart' ## docker-restart alias
+alias drestart='docker-restart' ## docker-restart alias
 
 ## Restart container (interactive)
 function docker-restart() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-restart -a (all) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-restart (container) -a (all) -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -14,6 +14,7 @@ function docker-restart() {
 
     local all=false
     local container
+    local containers=()
 
     #--------------------------------------------------
     # Parse arguments
@@ -78,10 +79,16 @@ function docker-restart() {
     fi
 
     #--------------------------------------------------
+    # Get argument
+    #--------------------------------------------------
+
+    container=${arguments[${LBOUND}]}
+
+    #--------------------------------------------------
     # Pick container
     #--------------------------------------------------
 
-    if [ -z "${arguments[${LBOUND}]}" ]; then
+    if [ -z "${container}" ]; then
         # copy command result to "containers" array
         while IFS='' read -r LINE; do
             containers+=("${LINE}");

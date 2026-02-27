@@ -26,22 +26,11 @@ Documentation available here: [./docs/bash_aliases.md](./docs/bash_aliases.md)
 Execute following command in your terminal
 
 ### With wget
-> jsDelivr
-```bash
-wget -nc -q https://cdn.jsdelivr.net/gh/TangoMan75/bash_aliases/install.sh && sh install.sh install
-```
-> raw.githubusercontent.com
 ```bash
 wget -nc -q https://raw.githubusercontent.com/TangoMan75/bash_aliases/master/install.sh && sh install.sh install
 ```
 
 ### With cURL
-if you have `curl` installed:
-> jsDelivr
-```bash
-curl -SsL https://cdn.jsdelivr.net/gh/TangoMan75/bash_aliases/install.sh -o install.sh  && sh install.sh install
-```
-> raw.githubusercontent.com
 ```bash
 curl -SsL https://raw.githubusercontent.com/TangoMan75/bash_aliases/master/install.sh -o install.sh  && sh install.sh install
 ```

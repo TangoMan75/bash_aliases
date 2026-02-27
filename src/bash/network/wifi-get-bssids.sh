@@ -38,35 +38,23 @@ function wifi-get-bssids() {
     fi
 
     #--------------------------------------------------
-    # Parse arguments
+    # Parse options
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :a:h option; do
-            case "${option}" in
-                a) wifi_adapter="${OPTARG}";;
-                h) _echo_warning 'wifi-get-bssids\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Print available bssids, channels and ssids\n'
-                    _usage 2 14
-                    _echo_success 'note:' 2 14; _echo_warning "available adapters: ${wifi_adapters}\n"
-                    return 0;;
-                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
-                    return 1;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :a:h option; do
+        case "${option}" in
+            a) wifi_adapter="${OPTARG}";;
+            h) _echo_warning 'wifi-get-bssids\n';
+                _echo_success 'description:' 2 14; _echo_primary 'Print available bssids, channels and ssids\n'
+                _usage 2 14
+                _echo_success 'note:' 2 14; _echo_warning "available adapters: ${wifi_adapters}\n"
+                return 0;;
+            :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                return 1;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------

@@ -76,4 +76,6 @@ function _load_env() {
     . "${file_path}"
 }
 
-_load_env "${APP_USER_CONFIG_DIR}/.env"
+if [ -f "${APP_USER_CONFIG_DIR}/.env" ]; then
+    _load_env "${APP_USER_CONFIG_DIR}/.env"
+fi

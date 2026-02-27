@@ -1,6 +1,7 @@
 #!/bin/bash
 
-alias dex='docker-exec' ## docker-exec alias
+alias dex='docker-exec'   ## docker-exec alias
+alias dexec='docker-exec' ## docker-exec alias
 
 ## Execute command inside given container (interactive)
 function docker-exec() {
@@ -18,7 +19,7 @@ function docker-exec() {
     local container
     local container_command
     local container_shell
-    local containerS=()
+    local containers=()
     local tty=false
     local user
 
@@ -41,7 +42,7 @@ function docker-exec() {
                 t) tty=true;;
                 u) user="${OPTARG}";;
                 h) _echo_warning 'docker-exec\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Execute command inside given container with docker or docker compose\n'
+                    _echo_success 'description:' 2 14; _echo_primary 'Execute command inside given container (interactive)\n'
                     _usage 2 14
                     return 0;;
                 :) _echo_danger "error: \"${OPTARG}\" requires value\n"
@@ -99,20 +100,20 @@ function docker-exec() {
     #--------------------------------------------------
 
     if [ -z "${container}" ]; then
-        # copy command result to "containerS" array
+        # copy command result to "containers" array
         while IFS='' read -r LINE; do
-            containerS+=("${LINE}");
+            containers+=("${LINE}");
         done < <(docker ps --format '{{.Names}}')
 
-        if [ -z "${containerS[${LBOUND}]}" ]; then
+        if [ -z "${containers[${LBOUND}]}" ]; then
             _echo_danger 'error: No running container found\n'
             return 1;
         fi
 
         PS3=$(_echo_success 'Please select container : ')
-        select container in "${containerS[@]}"; do
+        select container in "${containers[@]}"; do
             # validate selection
-            for ITEM in "${containerS[@]}"; do
+            for ITEM in "${containers[@]}"; do
                 # find selected container
                 if [[ "${ITEM}" == "${container}" ]]; then
                     # break two encapsulation levels

@@ -13,44 +13,24 @@
 # header
 #--------------------------------------------------
 
-# app name
-# shellcheck disable=SC2034
-APP_NAME=bash_aliases
-
-# app author
-# shellcheck disable=SC2034
-APP_AUTHOR=tangoman75
-
 # app version (set from latest git tag)
 # shellcheck disable=SC2034
 APP_VERSION=0.1.0
 
-# app source repository
-# shellcheck disable=SC2034
-APP_REPOSITORY=https://github.com/tangoman75/bash_aliases
-
-# app installation directory
-# shellcheck disable=SC2034
-APP_INSTALL_DIR=/home/tangoman75/Documents/bash_aliases
-
 # app user config directory
 # shellcheck disable=SC2034
-APP_USER_CONFIG_DIR=/home/tangoman75/.tangoman75/bash_aliases/config
+APP_USER_CONFIG_DIR="${HOME}/.local/share/TangoMan75/bash_aliases/config"
 
 #--------------------------------------------------
 # Global variables
 #--------------------------------------------------
 
-# zsh arrays lower bound start from 1
 # shellcheck disable=SC2034
-case "${SHELL}" in
-    '/bin/bash'|'/usr/bin/bash'|'/usr/bin/ash'|'/usr/bin/sh')
-        LBOUND=0
-    ;;
-    '/usr/bin/zsh')
-        LBOUND=1
-    ;;
-esac
+LBOUND=0
+if [ "${SHELL}" = '/usr/bin/zsh' ]; then
+    # zsh arrays lower bound start from 1
+    LBOUND=1
+fi
 
 #--------------------------------------------------
 # Colors global variables
@@ -80,100 +60,109 @@ _ALERT_DARK='\033[1;40;37m'
 # A semantic set of colors functions
 #--------------------------------------------------
 
-# Synopsis: echo_* <STRING> [INDENTATION] [PADDING]
-#  STRING:       Text to display.
-#  INDENTATION:  Indentation level (default: 0).
-#  PADDING:      Padding length (default: 0).
-
-## Print primary (bright white text)
+## Print primary text with optional indentation and padding
 _echo_primary() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_PRIMARY}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_PRIMARY}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print secondary (bright blue text)
+## Print secondary text with optional indentation and padding
 _echo_secondary() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_SECONDARY}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_SECONDARY}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print success (bright green text)
+## Print success text with optional indentation and padding
 _echo_success() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_SUCCESS}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_SUCCESS}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print danger (red text)
+## Print danger text with optional indentation and padding
 _echo_danger() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_DANGER}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_DANGER}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print warning (orange text)
+## Print warning text with optional indentation and padding
 _echo_warning() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_WARNING}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_WARNING}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print info (bright purple text)
+## Print info text with optional indentation and padding
 _echo_info() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_INFO}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_INFO}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print light (black text over white background)
+## Print light text with optional indentation and padding
 _echo_light() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_LIGHT}" "$3" "$1" "${_DEFAULT}"
+    # If you are printing the reset after a newline the terminal will "bleed" the last background color used into the next empty space or line
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_LIGHT}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print dark (white text over black background)
+## Print dark text with optional indentation and padding
 _echo_dark() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_DARK}" "$3" "$1" "${_DEFAULT}"
+    # If you are printing the reset after a newline the terminal will "bleed" the last background color used into the next empty space or line
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_DARK}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-# Synopsis: alert_* <STRING>
-#  STRING:  Text to display.
+## Print error message to STDERR, prefixed with "error: "
+_echo_error() {
+    #   MESSAGE: Error message to display.
 
-## Print primary alert (bold white text over bright blue background)
-_alert_primary() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_PRIMARY}" '' "${_ALERT_PRIMARY}" "$1" "${_ALERT_PRIMARY}" '';
+    printf "${_DANGER}error: %b${_DEFAULT}" "$1" >&2
 }
 
-## Print secondary alert (bold white text over bright purple background)
+## Print primary alert
+_alert_primary()   {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_PRIMARY}" '' "${_ALERT_PRIMARY}" "$1" "${_ALERT_PRIMARY}" ''
+}
+
+## Print secondary alert
 _alert_secondary() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SECONDARY}" '' "${_ALERT_SECONDARY}" "$1" "${_ALERT_SECONDARY}" '';
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SECONDARY}" '' "${_ALERT_SECONDARY}" "$1" "${_ALERT_SECONDARY}" ''
 }
 
-## Print success alert (bold white text over bright green background)
-_alert_success() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SUCCESS}" '' "${_ALERT_SUCCESS}" "$1" "${_ALERT_SUCCESS}" '';
+## Print success alert
+_alert_success()   {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SUCCESS}" '' "${_ALERT_SUCCESS}" "$1" "${_ALERT_SUCCESS}" ''
 }
 
-## Print danger alert (bold white text over bright red background)
-_alert_danger() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DANGER}" '' "${_ALERT_DANGER}" "$1" "${_ALERT_DANGER}" '';
+## Print danger alert
+_alert_danger()    {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DANGER}" '' "${_ALERT_DANGER}" "$1" "${_ALERT_DANGER}" ''
 }
 
-## Print warning alert (bold white text over bright orange background)
-_alert_warning() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_WARNING}" '' "${_ALERT_WARNING}" "$1" "${_ALERT_WARNING}" '';
+## Print warning alert
+_alert_warning()   {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_WARNING}" '' "${_ALERT_WARNING}" "$1" "${_ALERT_WARNING}" ''
 }
 
-## Print info alert (bold white text over bright blue background)
-_alert_info() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_INFO}" '' "${_ALERT_INFO}" "$1" "${_ALERT_INFO}" '';
+## Print info alert
+_alert_info()      {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_INFO}" '' "${_ALERT_INFO}" "$1" "${_ALERT_INFO}" ''
 }
 
-## Print light alert (black text over white background)
-_alert_light() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_LIGHT}" '' "${_ALERT_LIGHT}" "$1" "${_ALERT_LIGHT}" '';
+## Print light alert
+_alert_light()      {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_LIGHT}" '' "${_ALERT_LIGHT}" "$1" "${_ALERT_LIGHT}" ''
 }
 
-## Print dark alert (bold white text over black background)
-_alert_dark() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DARK}" '' "${_ALERT_DARK}" "$1" "${_ALERT_DARK}" '';
+## Print dark alert
+_alert_dark()      {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DARK}" '' "${_ALERT_DARK}" "$1" "${_ALERT_DARK}" ''
 }
 
 ## print TangoMan hero
@@ -266,7 +255,9 @@ EOT
     fi
 }
 
-_create_env "${APP_USER_CONFIG_DIR}/.env"
+if [ ! -f "${APP_USER_CONFIG_DIR}/.env" ]; then
+    _create_env "${APP_USER_CONFIG_DIR}/.env"
+fi
 
 ## Load ".env"
 function _load_env() {
@@ -344,7 +335,9 @@ function _load_env() {
     . "${file_path}"
 }
 
-_load_env "${APP_USER_CONFIG_DIR}/.env"
+if [ -f "${APP_USER_CONFIG_DIR}/.env" ]; then
+    _load_env "${APP_USER_CONFIG_DIR}/.env"
+fi
 
 ## Set parameter to ".env" file
 function _set_var() {
@@ -655,148 +648,6 @@ function tango-reload() {
     esac
 }
 
-## Update tangoman bash_aliases
-function tango-update() {
-    function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'tango-update -h (help)\n'
-    }
-
-    #--------------------------------------------------
-    # Check git installation
-    #--------------------------------------------------
-
-    if [ ! -x "$(command -v git)" ]; then
-        _echo_danger 'error: git required, enter: "sudo apt-get install -y git" to install\n'
-        return 1
-    fi
-
-    #--------------------------------------------------
-    # Check curl installation
-    #--------------------------------------------------
-
-    if [ ! -x "$(command -v curl)" ]; then
-        _echo_danger 'error: curl required, enter: "sudo apt-get install -y curl" to install\n'
-        return 1
-    fi
-
-    #--------------------------------------------------
-    # Variables
-    #--------------------------------------------------
-
-    local latest_version
-    local local_version=()
-    local remote_version=()
-    local result
-    # shellcheck disable=2153
-    local key=${LBOUND}
-
-    #--------------------------------------------------
-    # Parse options
-    #--------------------------------------------------
-
-    local option
-    while getopts :h option; do
-        case "${option}" in
-            h) _echo_warning 'tango-update\n';
-                _echo_success 'description:' 2 14; _echo_primary "Update \"${APP_AUTHOR}\" \"${APP_NAME}\"\n"
-                _usage 2 14
-                return 0;;
-            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                return 1;;
-        esac
-    done
-
-    #--------------------------------------------------
-    # Get repository latest tag
-    #--------------------------------------------------
-
-    latest_version="$(curl --silent GET "https://api.github.com/repos/${APP_AUTHOR}/${APP_NAME}/tags" | grep -m 1 '"name":' | sed -E 's/.*"[vV]?([^"]+)".*/\1/')"
-    if [ -z "${latest_version}" ]; then
-        _echo_danger "error: could not check ${APP_AUTHOR} \"${APP_NAME}\" latest available version\n"
-        return 1
-    fi
-
-    #--------------------------------------------------
-    # Compare local with remote version
-    #--------------------------------------------------
-
-    # split each version string with dot character (option 4, short syntax but not shellcheck valid)
-    # shellcheck disable=2207
-    local_version=($(echo "${APP_VERSION}" | tr '.' ' '))
-    # shellcheck disable=2207
-    remote_version=($(echo "${latest_version}" | tr '.' ' '))
-
-    if [ "${SHELL}" = /usr/bin/zsh ]; then
-        UBOUND=3
-    else
-        UBOUND=2
-    fi
-
-    while [ "${key}" -lt "${UBOUND}" ]; do
-        if [ "${local_version[$key]}" -eq "${remote_version[$key]}" ]; then
-            key=$(( key + 1 ))
-            continue
-        elif [ "${local_version[$key]}" -lt "${remote_version[$key]}" ]; then
-            result='<'
-        fi
-        break
-    done
-
-    #--------------------------------------------------
-    # Check update available
-    #--------------------------------------------------
-
-    if [ "${result}" = '<' ]; then
-        _echo_primary 'Update available for TangoMan "bash_aliases"\n'
-        _echo_danger  "your version:   ${APP_VERSION}\n"
-        _echo_warning "latest version: ${latest_version}\n"
-    else
-        _echo_info "your version:   ${APP_VERSION}\n"
-        _echo_info "latest version: ${latest_version}\n"
-        _echo_success 'Your version of TangoMan "bash_aliases" is up-to-date\n'
-
-        return 0
-    fi
-
-    #--------------------------------------------------
-    # Prompt user
-    #--------------------------------------------------
-
-    _echo_success 'Do you want to install new version? (yes/no) [no]: '
-    read -r USER_PROMPT
-    if [[ ! "${USER_PROMPT}" =~ ^[Yy](ES|es)?$ ]]; then
-        return 0
-    fi
-
-    #--------------------------------------------------
-
-    # Check install folder and clone repository
-    if [ ! -d "${APP_INSTALL_DIR}" ]; then
-        # Set install dir to default
-        APP_INSTALL_DIR=/home/tangoman75/Documents/bash_aliases
-
-        _echo_warning "\"${APP_INSTALL_DIR}\" not found, cloning source repository\n"
-
-        _echo_info "git clone --depth=1 \"${APP_REPOSITORY}\" \"${APP_INSTALL_DIR}\"\n"
-        git clone --depth=1 "${APP_REPOSITORY}" "${APP_INSTALL_DIR}"
-    fi
-
-    #--------------------------------------------------
-
-    _echo_info "\"${APP_INSTALL_DIR}\" || exit 1\n"
-    cd "${APP_INSTALL_DIR}" || exit 1
-
-    _echo_info 'git pull\n'
-    git pull
-
-    _echo_info 'make install silent=true\n'
-    make install silent=true
-
-    #--------------------------------------------------
-
-    tango-reload
-}
-
 #--------------------------------------------------
 # general aliases
 #--------------------------------------------------
@@ -808,13 +659,11 @@ alias hh='_echo_info "history|grep\n"; history|grep'                       ## Se
 alias hhh='cut -f1 -d" " ~/.bash_history|sort|uniq -c|sort -nr|head -n 30' ## Print 30 most used bash commands
 alias ll='_echo_info "ls -lFh\n"; ls -lFh'                                 ## List non hidden files human readable
 alias lll='_echo_info "ls -alFh\n"; ls -alFh'                              ## List all files human readable
-alias mkdir='mkdir -p'                                                     ## Create directory and required parent directories
 alias unmount='umount'                                                     ## Unmout drive
-alias xx='exit'                                                            ## Exit terminal
 
-alias ..='cd ..'                  ## Jump back 1 directory
-alias ...='cd ../../'             ## Jump back 2 directories at a time
-alias ....='cd ../../../'         ## Jump back 3 directories at a time
+alias ..='cd ..'          ## Jump back 1 directory
+alias ...='cd ../../'     ## Jump back 2 directories at a time
+alias ....='cd ../../../' ## Jump back 3 directories at a time
 
 #--------------------------------------------------
 # text editor
@@ -834,7 +683,7 @@ if [ -x "$(command -v xsel)" ]; then
 fi
 
 if [ -x "$(command -v xclip)" ]; then
-    alias clip='xclip -selection clipboard'  ## Copy selection to clipboard with xclip (requires xclip)
+    alias clip='xclip -selection clipboard' ## Copy selection to clipboard with xclip (requires xclip)
 fi
 
 ## List installed ides
@@ -844,7 +693,7 @@ function _list_ides() {
     #--------------------------------------------------
 
     local ide
-    local ides=(atom code nano phpstorm pycharm pycharm-community subl vim webstorm)
+    local ides=(antigravity atom clion code codium cursor intellij-idea-community micro nano nvim phpstorm pycharm pycharm-community subl vim webstorm windsurf zed)
     local result=''
 
     #--------------------------------------------------
@@ -1041,7 +890,8 @@ function open-in-ide() {
     done
 }
 
-alias dcc='docker-clean' ## docker-clean alias
+alias dcc='docker-clean'    ## docker-clean alias
+alias dclean='docker-clean' ## docker-clean alias
 
 ## Remove unused containers, images, networks, system and volumes
 function docker-clean() {
@@ -1127,7 +977,8 @@ function docker-clean() {
     fi
 }
 
-alias dex='docker-exec' ## docker-exec alias
+alias dex='docker-exec'   ## docker-exec alias
+alias dexec='docker-exec' ## docker-exec alias
 
 ## Execute command inside given container (interactive)
 function docker-exec() {
@@ -1145,7 +996,7 @@ function docker-exec() {
     local container
     local container_command
     local container_shell
-    local containerS=()
+    local containers=()
     local tty=false
     local user
 
@@ -1168,7 +1019,7 @@ function docker-exec() {
                 t) tty=true;;
                 u) user="${OPTARG}";;
                 h) _echo_warning 'docker-exec\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Execute command inside given container with docker or docker compose\n'
+                    _echo_success 'description:' 2 14; _echo_primary 'Execute command inside given container (interactive)\n'
                     _usage 2 14
                     return 0;;
                 :) _echo_danger "error: \"${OPTARG}\" requires value\n"
@@ -1226,20 +1077,20 @@ function docker-exec() {
     #--------------------------------------------------
 
     if [ -z "${container}" ]; then
-        # copy command result to "containerS" array
+        # copy command result to "containers" array
         while IFS='' read -r LINE; do
-            containerS+=("${LINE}");
+            containers+=("${LINE}");
         done < <(docker ps --format '{{.Names}}')
 
-        if [ -z "${containerS[${LBOUND}]}" ]; then
+        if [ -z "${containers[${LBOUND}]}" ]; then
             _echo_danger 'error: No running container found\n'
             return 1;
         fi
 
         PS3=$(_echo_success 'Please select container : ')
-        select container in "${containerS[@]}"; do
+        select container in "${containers[@]}"; do
             # validate selection
-            for ITEM in "${containerS[@]}"; do
+            for ITEM in "${containers[@]}"; do
                 # find selected container
                 if [[ "${ITEM}" == "${container}" ]]; then
                     # break two encapsulation levels
@@ -1301,19 +1152,22 @@ function docker-exec() {
     eval "${command}"
 }
 
-alias dkl='docker-kill' ## docker-kill alias
+alias dkl='docker-kill'   ## docker-kill alias
+alias dkill='docker-kill' ## docker-kill alias
 
-## Kill running containers
+## Kill running containers (interactive)
 function docker-kill() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-kill (container) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-kill (container) -a (all) -h (help)\n'
     }
 
     #--------------------------------------------------
     # Variables
     #--------------------------------------------------
 
+    local all=false
     local container
+    local containers=()
 
     #--------------------------------------------------
     # Parse arguments
@@ -1324,12 +1178,221 @@ function docker-kill() {
     local option
     while [ "$#" -gt 0 ]; do
         OPTIND=0
-        while getopts :h option; do
+        while getopts :ah option; do
             case "${option}" in
+                a) all=true;;
                 h) _echo_warning 'docker-kill\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Kill running containers\n'
+                    _echo_success 'description:' 2 14; _echo_primary 'Kill running containers (interactive)\n'
+                    return 0;;
+                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                    return 1;;
+                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                    return 1;;
+            esac
+        done
+        if [ "${OPTIND}" -gt 1 ]; then
+            shift $(( OPTIND-1 ))
+        fi
+        if [ "${OPTIND}" -eq 1 ]; then
+            arguments+=("$1")
+            shift
+        fi
+    done
+
+    #--------------------------------------------------
+    # Check docker installation
+    #--------------------------------------------------
+
+    if [ ! -x "$(command -v docker)" ]; then
+        _echo_danger 'error: docker required, enter: "sudo apt-get install -y docker" to install\n'
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Validate argument count
+    #--------------------------------------------------
+
+    if [ "${#arguments[@]}" -gt 1 ]; then
+        _echo_danger "error: too many arguments (${#arguments[@]})\n"
+        _usage 2 8
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Execute short command
+    #--------------------------------------------------
+
+    if [ "${all}" = true ]; then
+        _echo_info "docker kill $(docker ps --format '{{.Names}}' | tr -s "\n" ' ')\n"
+        # shellcheck disable=SC2046
+        docker kill $(docker ps --format '{{.Names}}')
+
+        return 0
+    fi
+
+    #--------------------------------------------------
+    # Get argument
+    #--------------------------------------------------
+
+    container=${arguments[${LBOUND}]}
+
+    #--------------------------------------------------
+    # Pick container
+    #--------------------------------------------------
+
+    if [ -z "${container}" ]; then
+        # copy command result to "containers" array
+        while IFS='' read -r LINE; do
+            containers+=("${LINE}");
+        done < <(docker ps --format '{{.Names}}')
+
+        if [ -z "${containers[${LBOUND}]}" ]; then
+            _echo_danger 'error: No running container found\n'
+            return 1;
+        fi
+
+        PS3=$(_echo_success 'Please select container : ')
+        select container in "${containers[@]}"; do
+            # validate selection
+            for item in "${containers[@]}"; do
+                # find selected container
+                if [[ "${item}" == "${container}" ]]; then
+                    # break two encapsulation levels
+                    break 2;
+                fi
+            done
+        done
+    fi
+    # shellcheck disable=2181
+    if [ $? != 0 ]; then
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Execute command
+    #--------------------------------------------------
+
+    _echo_info "docker kill \"${container}\"\n"
+    docker kill "${container}"
+}
+
+alias dls='docker-list'   ## docker-list alias
+alias dlist='docker-list' ## docker-list alias
+
+## List running containers
+function docker-list() {
+    function _usage() {
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-list -a (all) -d (use docker-compose) -h (help)\n'
+    }
+
+    #--------------------------------------------------
+    # Variables
+    #--------------------------------------------------
+
+    local all=false
+    local compose=false
+
+    #--------------------------------------------------
+    # Parse arguments
+    #--------------------------------------------------
+
+    local option
+    while getopts :adh option; do
+        case "${option}" in
+            a) all=true;;
+            d) compose=true;;
+            h) _echo_warning 'docker-list\n';
+                _echo_success 'description:' 2 14; _echo_primary 'List running containers\n'
+                _usage 2 14
+                return 0;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
+    done
+
+    #--------------------------------------------------
+    # Check docker installation
+    #--------------------------------------------------
+
+    if [ ! -x "$(command -v docker)" ]; then
+        _echo_danger 'error: docker required, enter: "sudo apt-get install -y docker" to install\n'
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Check docker installation
+    #--------------------------------------------------
+
+    if [ "${compose}" = true ]; then
+        if [ ! -x "$(command -v docker-compose)" ]; then
+            _echo_danger 'error: docker-compose required\n'
+            return 1
+        fi
+    fi
+
+    #--------------------------------------------------
+    # Execute command
+    #--------------------------------------------------
+
+    if [ "${compose}" = true ] &&  [ "${all}" = true ]; then
+        _echo_info "docker-compose ps --all --quiet 2>/dev/null\n"
+        docker-compose ps --all --quiet 2>/dev/null
+
+        return 0
+    fi
+
+    if [ "${compose}" = true ]; then
+        _echo_info "docker-compose ps --quiet 2>/dev/null\n"
+        docker-compose ps --quiet 2>/dev/null
+
+        return 0
+    fi
+
+    if [ "${all}" = true ]; then
+        _echo_info "docker ps --all --format '{{.Names}}'\n"
+        docker ps --all --format '{{.Names}}'
+
+        return 0
+    fi
+
+    _echo_info "docker ps --format '{{.Names}}'\n"
+    docker ps --format '{{.Names}}'
+}
+
+alias drm='docker-remove' ## docker-remove alias
+
+## Remove docker container (interactive)
+function docker-remove() {
+    function _usage() {
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-remove (container) -f (force) -h (help)\n'
+    }
+
+    #--------------------------------------------------
+    # Variables
+    #--------------------------------------------------
+
+    local force=false
+    local container
+    local containers=()
+
+    #--------------------------------------------------
+    # Parse arguments
+    #--------------------------------------------------
+
+    local arguments=()
+    local OPTARG
+    local option
+    while [ "$#" -gt 0 ]; do
+        OPTIND=0
+        while getopts :fh option; do
+            case "${option}" in
+                f) force=true;;
+                h) _echo_warning 'docker-remove\n';
+                    _echo_success 'description:' 2 14; _echo_primary 'Remove docker container (interactive)\n'
                     _usage 2 14
                     return 0;;
+                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                    return 1;;
                 \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
                     return 1;;
             esac
@@ -1369,131 +1432,56 @@ function docker-kill() {
     container=${arguments[${LBOUND}]}
 
     #--------------------------------------------------
-    # Execute command
+    # Pick container
     #--------------------------------------------------
 
     if [ -z "${container}" ]; then
-        _echo_info "docker kill $(docker ps --format '{{.Names}}' | tr -s "\n" ' ')\n"
-        # shellcheck disable=SC2046
-        docker kill $(docker ps --format '{{.Names}}')
+        # copy command result to "containers" array
+        while IFS='' read -r LINE; do
+            containers+=("${LINE}");
+        done < <(docker ps --format '{{.Names}}')
 
-        return 0
-    fi
+        if [ -z "${containers[${LBOUND}]}" ]; then
+            _echo_danger 'error: No container found\n'
+            return 1;
+        fi
 
-    _echo_info "docker kill \"${container}\"\n"
-    docker kill "${container}"
-}
-
-alias dls='docker-list' ## docker-list alias
-
-## List running containers
-function docker-list() {
-    function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-list -a (all) -d (use docker-compose) -h (help)\n'
-    }
-
-    #--------------------------------------------------
-    # Variables
-    #--------------------------------------------------
-
-    local all=false
-    local compose=false
-
-    #--------------------------------------------------
-    # Parse arguments
-    #--------------------------------------------------
-
-    local arguments=()
-    local OPTARG
-    local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :adh option; do
-            case "${option}" in
-                a) all=true;;
-                d) compose=true;;
-                h) _echo_warning 'docker-list\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'List running containers\n'
-                    _usage 2 14
-                    return 0;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
+        PS3=$(_echo_success 'Please select container : ')
+        select container in "${containers[@]}"; do
+            # validate selection
+            for item in "${containers[@]}"; do
+                # find selected container
+                if [[ "${item}" == "${container}" ]]; then
+                    # break two encapsulation levels
+                    break 2;
+                fi
+            done
         done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
-    done
-
-    #--------------------------------------------------
-    # Check docker installation
-    #--------------------------------------------------
-
-    if [ ! -x "$(command -v docker)" ]; then
-        _echo_danger 'error: docker required, enter: "sudo apt-get install -y docker" to install\n'
-        return 1
     fi
-
-    #--------------------------------------------------
-    # Validate argument count
-    #--------------------------------------------------
-
-    if [ "${#arguments[@]}" -gt 1 ]; then
-        _echo_danger "error: too many arguments (${#arguments[@]})\n"
-        _usage 2 8
+    # shellcheck disable=2181
+    if [ $? != 0 ]; then
         return 1
-    fi
-
-    #--------------------------------------------------
-    # Check docker installation
-    #--------------------------------------------------
-
-    if [ "${compose}" = true ]; then
-        if [ ! -x "$(command -v docker-compose)" ]; then
-            _echo_danger 'error: docker-compose required\n'
-            return 1
-        fi
     fi
 
     #--------------------------------------------------
     # Execute command
     #--------------------------------------------------
 
-    if [ "${compose}" = true ] &&  [ "${all}" = true ]; then
-        _echo_info "docker-compose ps --all --quiet 2>/dev/null\n"
-        docker-compose ps --all --quiet 2>/dev/null
-
-        return 0
+    if [ "${force}" = true ]; then
+        _echo_info "docker rm --force \"${container}\"\n"
+        docker rm --force "${container}"
+    else
+        _echo_info "docker rm \"${container}\"\n"
+        docker rm "${container}"
     fi
-
-    if [ "${compose}" = true ]; then
-        _echo_info "docker-compose ps --quiet 2>/dev/null\n"
-        docker-compose ps --quiet 2>/dev/null
-
-        return 0
-    fi
-
-    if [ "${all}" = true ]; then
-        _echo_info "docker ps --all --quiet --format '{{.Names}}'\n"
-        docker ps --all --quiet --format '{{.Names}}'
-
-        return 0
-    fi
-
-    _echo_info "docker ps --format '{{.Names}}'\n"
-    docker ps --format '{{.Names}}'
 }
 
-alias drt='docker-restart' ## docker-restart alias
+alias drestart='docker-restart' ## docker-restart alias
 
 ## Restart container (interactive)
 function docker-restart() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-restart -a (all) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-restart (container) -a (all) -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -1502,6 +1490,7 @@ function docker-restart() {
 
     local all=false
     local container
+    local containers=()
 
     #--------------------------------------------------
     # Parse arguments
@@ -1566,10 +1555,16 @@ function docker-restart() {
     fi
 
     #--------------------------------------------------
+    # Get argument
+    #--------------------------------------------------
+
+    container=${arguments[${LBOUND}]}
+
+    #--------------------------------------------------
     # Pick container
     #--------------------------------------------------
 
-    if [ -z "${arguments[${LBOUND}]}" ]; then
+    if [ -z "${container}" ]; then
         # copy command result to "containers" array
         while IFS='' read -r LINE; do
             containers+=("${LINE}");
@@ -1605,9 +1600,10 @@ function docker-restart() {
     docker restart "${container}"
 }
 
-alias dsh='docker-shell' ## docker-shell alias
+alias dsh='docker-shell'    ## docker-shell alias
+alias dshell='docker-shell' ## docker-shell alias
 
-## Enter interactive shell inside container (interactive)
+## Enter interactive shell inside container
 function docker-shell() {
     function _usage() {
         _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-shell (container) [-u user] -S [shell] -a (ash) -b (bash) -c (csh) -d (dash) -k (ksh) -s (sh) -t (tcsh) -z (zsh) -h (help)\n'
@@ -1734,7 +1730,132 @@ function docker-shell() {
     docker exec -it -u "${user}" "${container}" "${container_shell}"
 }
 
-alias dst='docker-status' ## docker-status alias
+alias dstart='docker-start' ## docker-start alias
+
+## start container (interactive)
+function docker-start() {
+    function _usage() {
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-start (container) -a (all) -h (help)\n'
+    }
+
+    #--------------------------------------------------
+    # Variables
+    #--------------------------------------------------
+
+    local all=false
+    local container
+    local containers=()
+
+    #--------------------------------------------------
+    # Parse arguments
+    #--------------------------------------------------
+
+    local arguments=()
+    local OPTARG
+    local option
+    while [ "$#" -gt 0 ]; do
+        OPTIND=0
+        while getopts :ah option; do
+            case "${option}" in
+                a) all=true;;
+                h) _echo_warning 'docker-start\n';
+                    _echo_success 'description:' 2 14; _echo_primary 'start container (interactive)\n'
+                    _usage 2 14
+                    return 0;;
+                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                    return 1;;
+                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                    return 1;;
+            esac
+        done
+        if [ "${OPTIND}" -gt 1 ]; then
+            shift $(( OPTIND-1 ))
+        fi
+        if [ "${OPTIND}" -eq 1 ]; then
+            arguments+=("$1")
+            shift
+        fi
+    done
+
+    #--------------------------------------------------
+    # Check docker installation
+    #--------------------------------------------------
+
+    if [ ! -x "$(command -v docker)" ]; then
+        _echo_danger 'error: docker required, enter: "sudo apt-get install -y docker" to install\n'
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Validate argument count
+    #--------------------------------------------------
+
+    if [ "${#arguments[@]}" -gt 1 ]; then
+        _echo_danger "error: too many arguments (${#arguments[@]})\n"
+        _usage 2 8
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Execute short command
+    #--------------------------------------------------
+
+    if [ "${all}" = true ]; then
+        _echo_info "docker start $(docker ps --filter 'status=exited' --format '{{.Names}}' | tr -s "\n" ' ')\n"
+        # shellcheck disable=SC2046
+        docker start $(docker ps --filter 'status=exited' --format '{{.Names}}')
+
+        return 0
+    fi
+
+    #--------------------------------------------------
+    # Get argument
+    #--------------------------------------------------
+
+    container=${arguments[${LBOUND}]}
+
+    #--------------------------------------------------
+    # Pick container
+    #--------------------------------------------------
+
+    if [ -z "${container}" ]; then
+        # copy command result to "containers" array
+        while IFS='' read -r LINE; do
+            containers+=("${LINE}");
+        done < <(docker ps --filter 'status=exited' --format '{{.Names}}')
+
+        if [ -z "${containers[${LBOUND}]}" ]; then
+            _echo_danger 'error: No container found\n'
+            return 1;
+        fi
+
+        PS3=$(_echo_success 'Please select container : ')
+        select container in "${containers[@]}"; do
+            # validate selection
+            for item in "${containers[@]}"; do
+                # find selected container
+                if [[ "${item}" == "${container}" ]]; then
+                    # break two encapsulation levels
+                    break 2;
+                fi
+            done
+        done
+    fi
+    # shellcheck disable=2181
+    if [ $? != 0 ]; then
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Execute command
+    #--------------------------------------------------
+
+    _echo_info "docker start \"${container}\"\n"
+    docker start "${container}"
+}
+
+alias dst='docker-status'     ## docker-status alias
+alias dstatus='docker-status' ## docker-status alias
 
 ## List images, volumes and network information
 function docker-status() {
@@ -1786,19 +1907,21 @@ function docker-status() {
     docker inspect --format '{{slice .ID 0 13}} {{slice .Name 1}} {{range .NetworkSettings.Networks}}{{if .IPAddress}}http://{{.IPAddress}} {{end}}{{end}}{{range $p, $c := .NetworkSettings.Ports}}{{$p}} {{end}}' $(docker ps --all --quiet) | column -t
 }
 
-alias dsp='docker-stop' ## docker-stop alias
+alias dstop='docker-stop' ## docker-stop alias
 
-## Stop running containers
+## Stop running containers (interactive)
 function docker-stop() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-stop (container) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-stop (container) -a (all) -h (help)\n'
     }
 
     #--------------------------------------------------
     # Variables
     #--------------------------------------------------
 
+    local all=false
     local container
+    local containers=()
 
     #--------------------------------------------------
     # Parse arguments
@@ -1809,12 +1932,15 @@ function docker-stop() {
     local option
     while [ "$#" -gt 0 ]; do
         OPTIND=0
-        while getopts :h option; do
+        while getopts :ah option; do
             case "${option}" in
+                a) all=true;;
                 h) _echo_warning 'docker-stop\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Stop running containers\n'
+                    _echo_success 'description:' 2 14; _echo_primary 'Stop running containers (interactive)\n'
                     _usage 2 14
                     return 0;;
+                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                    return 1;;
                 \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
                     return 1;;
             esac
@@ -1848,20 +1974,58 @@ function docker-stop() {
     fi
 
     #--------------------------------------------------
-    # Get argument
+    # Execute short command
     #--------------------------------------------------
 
-    container=${arguments[${LBOUND}]}
-
-    #--------------------------------------------------
-
-    if [ -z "${container}" ]; then
+    if [ "${all}" = true ]; then
         _echo_info "docker stop $(docker ps --format '{{.Names}}' | tr -s "\n" ' ')\n"
         # shellcheck disable=SC2046
         docker stop $(docker ps --format '{{.Names}}')
 
         return 0
     fi
+
+    #--------------------------------------------------
+    # Get argument
+    #--------------------------------------------------
+
+    container=${arguments[${LBOUND}]}
+
+    #--------------------------------------------------
+    # Pick container
+    #--------------------------------------------------
+
+    if [ -z "${container}" ]; then
+        # copy command result to "containers" array
+        while IFS='' read -r LINE; do
+            containers+=("${LINE}");
+        done < <(docker ps --format '{{.Names}}')
+
+        if [ -z "${containers[${LBOUND}]}" ]; then
+            _echo_danger 'error: No running container found\n'
+            return 1;
+        fi
+
+        PS3=$(_echo_success 'Please select container : ')
+        select container in "${containers[@]}"; do
+            # validate selection
+            for item in "${containers[@]}"; do
+                # find selected container
+                if [[ "${item}" == "${container}" ]]; then
+                    # break two encapsulation levels
+                    break 2;
+                fi
+            done
+        done
+    fi
+    # shellcheck disable=2181
+    if [ $? != 0 ]; then
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Execute command
+    #--------------------------------------------------
 
     _echo_info "docker stop \"${container}\"\n"
     docker stop "${container}"
@@ -2432,6 +2596,7 @@ function _get_main_branch() {
 # git aliases
 #--------------------------------------------------
 
+alias glp='git log --pretty=format:"%C(yellow)%h%C(reset) - %C(green)%an%C(reset), %ar : %s"' ## Pretty Git Log
 alias what='_echo_info "git whatchanged -p --abbrev-commit --pretty=medium\n"; git whatchanged -p --abbrev-commit --pretty=medium' ## Print changes from every commit
 
 ## Check cherry-pick is in progress
@@ -3366,12 +3531,6 @@ function add() {
     fi
 }
 
-#--------------------------------------------------
-# git aliases
-#--------------------------------------------------
-
-alias glp='git log --pretty=format:"%C(yellow)%h%C(reset) - %C(green)%an%C(reset), %ar : %s"' ## Pretty Git Log
-
 # Amend last commit message, author and date
 function amend() {
     conventional-commit -X "$@"
@@ -3500,7 +3659,7 @@ function blame() {
     # Argument could be a branch name or a commit hash
     if [ -n "${commit_hash}" ]; then
         if [ "$(_commit_exists "${arguments[${LBOUND}]}")" = false ]; then
-            _echo_danger "error: Invalid commit hash : \"${OBJECT}\"\n"
+            _echo_danger "error: Invalid commit hash : \"${commit_hash}\"\n"
             _usage
             return 1
         fi
@@ -7835,37 +7994,25 @@ function stash() {
     local show=false
 
     #--------------------------------------------------
-    # Parse arguments
+    # Parse options
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :Aaclrsh option; do
-            case "${option}" in
-                A) all=true;;
-                a) apply=true;;
-                c) clear=true;;
-                l) list=true;;
-                r) remove=true;;
-                s) show=true;;
-                h) _echo_warning 'stash\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Manage stashed files\n'
-                    _usage 2 14
-                    return 0;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :Aaclrsh option; do
+        case "${option}" in
+            A) all=true;;
+            a) apply=true;;
+            c) clear=true;;
+            l) list=true;;
+            r) remove=true;;
+            s) show=true;;
+            h) _echo_warning 'stash\n';
+                _echo_success 'description:' 2 14; _echo_primary 'Manage stashed files\n'
+                _usage 2 14
+                return 0;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------
@@ -7896,16 +8043,7 @@ function stash() {
     fi
 
     #--------------------------------------------------
-    # Validate argument count
-    #--------------------------------------------------
-
-    if [ "${#arguments[@]}" -ne 0 ]; then
-        _echo_danger "error: too many arguments (${#arguments[@]})\n"
-        _usage
-
-        return 1
-    fi
-
+    # Prepare command
     #--------------------------------------------------
 
     if [ "${apply}" = true ]; then
@@ -10287,49 +10425,29 @@ function list-adapters() {
     local verbose=false
 
     #--------------------------------------------------
-    # Parse arguments
+    # Parse options
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :cwvh option; do
-            case "${option}" in
-                c) filter_connected=true;;
-                w) filter_wifi=true;;
-                v) verbose=true;;
-                h) _echo_warning 'list-adapters\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'List network adapters\n'
-                    _usage 2 14
-                    _echo_success 'note:' 2 14; _echo_warning "available adapters: ${adapters}\n"
-                    return 0;;
-                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
-                    return 1;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :cwvh option; do
+        case "${option}" in
+            c) filter_connected=true;;
+            w) filter_wifi=true;;
+            v) verbose=true;;
+            h) _echo_warning 'list-adapters\n';
+                _echo_success 'description:' 2 14; _echo_primary 'List network adapters\n'
+                _usage 2 14
+                _echo_success 'note:' 2 14; _echo_warning "available adapters: ${adapters}\n"
+                return 0;;
+            :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                return 1;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------
-    # Validate argument count
-    #--------------------------------------------------
-
-    if [ "${#arguments[@]}" -gt 0 ]; then
-        _echo_danger "error: too many arguments (${#arguments[@]})\n"
-        _usage 2 8
-        return 1
-    fi
-
+    # Prepare command
     #--------------------------------------------------
 
     if [ "${filter_connected}" = true ]; then
@@ -10850,35 +10968,23 @@ function wifi-get-bssids() {
     fi
 
     #--------------------------------------------------
-    # Parse arguments
+    # Parse options
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :a:h option; do
-            case "${option}" in
-                a) wifi_adapter="${OPTARG}";;
-                h) _echo_warning 'wifi-get-bssids\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Print available bssids, channels and ssids\n'
-                    _usage 2 14
-                    _echo_success 'note:' 2 14; _echo_warning "available adapters: ${wifi_adapters}\n"
-                    return 0;;
-                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
-                    return 1;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :a:h option; do
+        case "${option}" in
+            a) wifi_adapter="${OPTARG}";;
+            h) _echo_warning 'wifi-get-bssids\n';
+                _echo_success 'description:' 2 14; _echo_primary 'Print available bssids, channels and ssids\n'
+                _usage 2 14
+                _echo_success 'note:' 2 14; _echo_warning "available adapters: ${wifi_adapters}\n"
+                return 0;;
+            :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                return 1;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------
@@ -12274,7 +12380,7 @@ function wifi-sniff() {
 ## Switch default ssh id
 function switch-default-ssh() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'switch-default-id -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'switch-default-ssh -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -12296,7 +12402,7 @@ function switch-default-ssh() {
     local option
     while getopts :h option; do
         case "${option}" in
-            h) _echo_warning 'switch-default-id\n';
+            h) _echo_warning 'switch-default-ssh\n';
                 _echo_success 'description:' 2 14; _echo_primary 'Switch default ssh id\n'
                 _usage 2 14
                 return 0;;
@@ -12493,10 +12599,10 @@ function random-string() {
     < /dev/urandom tr -dc 'a-zA-Z0-9' | fold -w "${length}" | head -n 1
 }
 
-## Decode string froml URL format
+## Decode string from URL format
 function urldecode() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urldecode -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urldecode [string] -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -12557,10 +12663,10 @@ function urldecode() {
     echo "${result}"
 }
 
-## Encode string froml URL format
+## Encode string to URL format
 function urlencode() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urlencode -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urlencode [string] -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -12675,31 +12781,19 @@ function sf-dump-server() {
     local console
 
     #--------------------------------------------------
-    # Parse arguments
+    # Parse options
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :h option; do
-            case "${option}" in
-                h) _echo_warning 'sf-dump-server\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Start project debug server\n'
-                    _usage 2 14
-                    return 0;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :h option; do
+        case "${option}" in
+            h) _echo_warning 'sf-dump-server\n';
+                _echo_success 'description:' 2 14; _echo_primary 'Start project debug server\n'
+                _usage 2 14
+                return 0;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------
@@ -12712,15 +12806,7 @@ function sf-dump-server() {
     fi
 
     #--------------------------------------------------
-    # Validate argument count
-    #--------------------------------------------------
-
-    if [ "${#arguments[@]}" -gt 1 ]; then
-        _echo_danger "error: too many arguments (${#arguments[@]})\n"
-        _usage 2 8
-        return 1
-    fi
-
+    # Prepare command
     #--------------------------------------------------
 
     # find correct console executable
@@ -12734,6 +12820,8 @@ function sf-dump-server() {
         return 1
     fi
 
+    #--------------------------------------------------
+    # Execute command
     #--------------------------------------------------
 
     _echo_info "php -d memory-limit=-1 ${console} server:dump --env=dev\n"
@@ -12753,32 +12841,20 @@ function sf-server() {
     local enable_tls=false
 
     #--------------------------------------------------
-    # Parse arguments
+    # Parse options
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :th option; do
-            case "${option}" in
-                t) enable_tls=true;;
-                h) _echo_warning 'sf-server\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Start Symfony binary server\n'
-                    _usage 2 14
-                    return 0;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :th option; do
+        case "${option}" in
+            t) enable_tls=true;;
+            h) _echo_warning 'sf-server\n';
+                _echo_success 'description:' 2 14; _echo_primary 'Start Symfony binary server\n'
+                _usage 2 14
+                return 0;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------
@@ -12791,15 +12867,7 @@ function sf-server() {
     fi
 
     #--------------------------------------------------
-    # Validate argument count
-    #--------------------------------------------------
-
-    if [ "${#arguments[@]}" -gt 1 ]; then
-        _echo_danger "error: too many arguments (${#arguments[@]})\n"
-        _usage 2 8
-        return 1
-    fi
-
+    # Execute command
     #--------------------------------------------------
 
     if [ "${enable_tls}" = true ]; then
@@ -13506,9 +13574,11 @@ function pkg-install() {
 
     if [ "${distro}" = 'Debian' ] || [ "${distro}" = 'Kali' ]; then
         _echo_info 'sudo apt-get update\n'
+        # shellcheck disable=SC2033
         sudo apt-get update
 
         _echo_info "sudo apt-get install -y \"$1\"\n"
+        # shellcheck disable=SC2033
         sudo apt-get install -y "$1"
 
         return 0
@@ -13605,6 +13675,7 @@ function pkg-remove() {
     #--------------------------------------------------
 
     _echo_info "sudo apt-get remove -y \"$1\"\n"
+    # shellcheck disable=SC2033
     sudo apt-get remove -y "$1"
 }
 
@@ -13716,6 +13787,7 @@ case "${OSTYPE}" in
     ;;
     'linux-androideabi')
         alias sudo='tsudo'  ## sudo alias (android)
+        # shellcheck disable=SC2032
         alias apt-get='pkg' ## apt-get alias (android)
         alias apt='pkg'     ## apt alias (android)
         
@@ -15019,7 +15091,7 @@ alias gg='google' ## google alias
 ## Search on google.com
 function google() {
     # ${*}  : capture all the arguments passed to the function
-    # // // : substitution using a separator.
+    # // / : substitution using a separator.
     # It replaces all single spaces with a single space.
 
     _echo_info "open \"https://www.google.com/search?q=${*// /+}\"\n"
@@ -15031,7 +15103,7 @@ alias yt='youtube' ## youtube alias
 ## Search on youtube.com
 function youtube() {
     # ${*}  : capture all the arguments passed to the function
-    # // // : substitution using a separator.
+    # // / : substitution using a separator.
     # It replaces all single spaces with a "+" character.
 
     _echo_info "open \"https://www.youtube.com/results?search_query=${*// /+}\"\n"

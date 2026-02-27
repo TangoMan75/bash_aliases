@@ -7,13 +7,13 @@ TangoMan bash_aliases documentation
 ⚡ _header
 -----------
 
-### 🤖 hero
-
-print TangoMan hero
-
 ### 🤖 _create_env
 
 Create ".env" file into "~/.TangoMan75/bash_aliases/config" folder
+
+### 🤖 hero
+
+print TangoMan hero
 
 ### 🤖 _load_env
 
@@ -66,7 +66,7 @@ Clear terminal & history
 Print history
 
 ```bash
-'echo_info "history\n"; history'
+'_echo_info "history\n"; history'
 ```
 
 ### 🤡 hh
@@ -74,7 +74,7 @@ Print history
 Search history
 
 ```bash
-'echo_info "history|grep\n"; history|grep'
+'_echo_info "history|grep\n"; history|grep'
 ```
 
 ### 🤡 hhh
@@ -90,7 +90,7 @@ Print 30 most used bash commands
 List non hidden files human readable
 
 ```bash
-'echo_info "ls -lFh\n"; ls -lFh'
+'_echo_info "ls -lFh\n"; ls -lFh'
 ```
 
 ### 🤡 lll
@@ -98,15 +98,7 @@ List non hidden files human readable
 List all files human readable
 
 ```bash
-'echo_info "ls -alFh\n"; ls -alFh'
-```
-
-### 🤡 mkdir
-
-Create directory and required parent directories
-
-```bash
-'mkdir -p'
+'_echo_info "ls -alFh\n"; ls -alFh'
 ```
 
 ### 🤡 unmount
@@ -115,14 +107,6 @@ Unmout drive
 
 ```bash
 'umount'
-```
-
-### 🤡 xx
-
-Exit terminal
-
-```bash
-'exit'
 ```
 
 ### 🤡 s
@@ -191,6 +175,14 @@ docker-clean alias
 'docker-clean'
 ```
 
+### 🤡 dclean
+
+docker-clean alias
+
+```bash
+'docker-clean'
+```
+
 ### 🤖 docker-exec
 
 Execute command inside given container (interactive)
@@ -203,11 +195,27 @@ docker-exec alias
 'docker-exec'
 ```
 
+### 🤡 dexec
+
+docker-exec alias
+
+```bash
+'docker-exec'
+```
+
 ### 🤖 docker-kill
 
-Kill running containers
+Kill running containers (interactive)
 
 ### 🤡 dkl
+
+docker-kill alias
+
+```bash
+'docker-kill'
+```
+
+### 🤡 dkill
 
 docker-kill alias
 
@@ -227,11 +235,31 @@ docker-list alias
 'docker-list'
 ```
 
+### 🤡 dlist
+
+docker-list alias
+
+```bash
+'docker-list'
+```
+
+### 🤖 docker-remove
+
+Remove docker container (interactive)
+
+### 🤡 drm
+
+docker-remove alias
+
+```bash
+'docker-remove'
+```
+
 ### 🤖 docker-restart
 
 Restart container (interactive)
 
-### 🤡 drt
+### 🤡 drestart
 
 docker-restart alias
 
@@ -241,7 +269,7 @@ docker-restart alias
 
 ### 🤖 docker-shell
 
-Enter interactive shell inside container (interactive)
+Enter interactive shell inside container
 
 ### 🤡 dsh
 
@@ -249,6 +277,26 @@ docker-shell alias
 
 ```bash
 'docker-shell'
+```
+
+### 🤡 dshell
+
+docker-shell alias
+
+```bash
+'docker-shell'
+```
+
+### 🤖 docker-start
+
+start container (interactive)
+
+### 🤡 dstart
+
+docker-start alias
+
+```bash
+'docker-start'
 ```
 
 ### 🤖 docker-status
@@ -263,11 +311,19 @@ docker-status alias
 'docker-status'
 ```
 
+### 🤡 dstatus
+
+docker-status alias
+
+```bash
+'docker-status'
+```
+
 ### 🤖 docker-stop
 
-Stop running containers
+Stop running containers (interactive)
 
-### 🤡 dsp
+### 🤡 dstop
 
 docker-stop alias
 
@@ -318,12 +374,20 @@ Get current branch name
 
 Get main branch name
 
+### 🤡 glp
+
+Pretty Git Log
+
+```bash
+'git log --pretty
+```
+
 ### 🤡 what
 
 Print changes from every commit
 
 ```bash
-'echo_info "git whatchanged -p --abbrev-commit --pretty
+'_echo_info "git whatchanged -p --abbrev-commit --pretty
 ```
 
 ### 🤖 _is_cherry_pick_in_progress
@@ -429,14 +493,6 @@ rint Jira url
 ### 🤖 add
 
 Stage files to git index
-
-### 🤡 glp
-
-Pretty Git Log
-
-```bash
-'git log --pretty
-```
 
 ### 🤖 amend
 
@@ -653,7 +709,7 @@ Change multimedia file to correct extension
 Print local ip
 
 ```bash
-'echo_info "hostname -I\n"; hostname -I'
+'_echo_info "hostname -I\n"; hostname -I'
 ```
 
 ### 🤡 open-ports
@@ -661,7 +717,7 @@ Print local ip
 List open ports
 
 ```bash
-'echo_info "lsof -i -Pn | grep LISTEN\n"; lsof -i -Pn | grep LISTEN'
+'_echo_info "lsof -i -Pn | grep LISTEN\n"; lsof -i -Pn | grep LISTEN'
 ```
 
 ### 🤡 test-tor
@@ -709,7 +765,7 @@ Print mac address
 Resolve reverse hostname
 
 ```bash
-'echo_info "host\n" &&; host'
+'_echo_info "host\n" &&; host'
 ```
 
 ### 🤡 iptables-list-rules
@@ -717,7 +773,7 @@ Resolve reverse hostname
 list iptables rules
 
 ```bash
-'echo_info "sudo iptables -S"; sudo iptables -S; echo_info "sudo iptables -L\n"; sudo iptables -L'
+'_echo_info "sudo iptables -S"; sudo iptables -S; _echo_info "sudo iptables -L\n"; sudo iptables -L'
 ```
 
 ### 🤡 start-vnc
@@ -725,7 +781,7 @@ list iptables rules
 Start VNC server in the background
 
 ```bash
-'echo_info "x11vnc -usepw -bg -forever\n"; x11vnc -usepw -bg -forever'
+'_echo_info "x11vnc -usepw -bg -forever\n"; x11vnc -usepw -bg -forever'
 ```
 
 ### 🤡 stop-vnc
@@ -733,7 +789,7 @@ Start VNC server in the background
 Start VNC server in the background
 
 ```bash
-'echo_info "x11vnc -remote stop\n"; x11vnc -remote stop'
+'_echo_info "x11vnc -remote stop\n"; x11vnc -remote stop'
 ```
 
 ### 🤡 start-ssh
@@ -831,7 +887,7 @@ Execute python3 command
 Perform python unittest
 
 ```bash
-'echo_info "python3 -m unittest -v\n" && python3 -m unittest -v'
+'_echo_info "python3 -m unittest -v\n" && python3 -m unittest -v'
 ```
 
 ### 🤡 py-install
@@ -901,11 +957,11 @@ Generate random string
 
 ### 🤖 urldecode
 
-Decode string froml URL format
+Decode string from URL format
 
 ### 🤖 urlencode
 
-Encode string froml URL format
+Encode string to URL format
 
 ⚡ symfony
 -----------
@@ -1061,7 +1117,7 @@ apt alias (android)
 Open current location in terminal
 
 ```bash
-'echo_info "gnome-terminal --working-directory
+'_echo_info "gnome-terminal --working-directory
 ```
 
 ### 🤖 open

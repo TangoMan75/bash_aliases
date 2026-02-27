@@ -1,6 +1,7 @@
 #!/bin/bash
 
-alias dcc='docker-clean' ## docker-clean alias
+alias dcc='docker-clean'    ## docker-clean alias
+alias dclean='docker-clean' ## docker-clean alias
 
 ## Remove unused containers, images, networks, system and volumes
 function docker-clean() {

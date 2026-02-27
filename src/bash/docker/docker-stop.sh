@@ -1,18 +1,20 @@
 #!/bin/bash
 
-alias dsp='docker-stop' ## docker-stop alias
+alias dstop='docker-stop' ## docker-stop alias
 
-## Stop running containers
+## Stop running containers (interactive)
 function docker-stop() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-stop (container) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-stop (container) -a (all) -h (help)\n'
     }
 
     #--------------------------------------------------
     # Variables
     #--------------------------------------------------
 
+    local all=false
     local container
+    local containers=()
 
     #--------------------------------------------------
     # Parse arguments
@@ -23,12 +25,15 @@ function docker-stop() {
     local option
     while [ "$#" -gt 0 ]; do
         OPTIND=0
-        while getopts :h option; do
+        while getopts :ah option; do
             case "${option}" in
+                a) all=true;;
                 h) _echo_warning 'docker-stop\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Stop running containers\n'
+                    _echo_success 'description:' 2 14; _echo_primary 'Stop running containers (interactive)\n'
                     _usage 2 14
                     return 0;;
+                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                    return 1;;
                 \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
                     return 1;;
             esac
@@ -62,20 +67,58 @@ function docker-stop() {
     fi
 
     #--------------------------------------------------
-    # Get argument
+    # Execute short command
     #--------------------------------------------------
 
-    container=${arguments[${LBOUND}]}
-
-    #--------------------------------------------------
-
-    if [ -z "${container}" ]; then
+    if [ "${all}" = true ]; then
         _echo_info "docker stop $(docker ps --format '{{.Names}}' | tr -s "\n" ' ')\n"
         # shellcheck disable=SC2046
         docker stop $(docker ps --format '{{.Names}}')
 
         return 0
     fi
+
+    #--------------------------------------------------
+    # Get argument
+    #--------------------------------------------------
+
+    container=${arguments[${LBOUND}]}
+
+    #--------------------------------------------------
+    # Pick container
+    #--------------------------------------------------
+
+    if [ -z "${container}" ]; then
+        # copy command result to "containers" array
+        while IFS='' read -r LINE; do
+            containers+=("${LINE}");
+        done < <(docker ps --format '{{.Names}}')
+
+        if [ -z "${containers[${LBOUND}]}" ]; then
+            _echo_danger 'error: No running container found\n'
+            return 1;
+        fi
+
+        PS3=$(_echo_success 'Please select container : ')
+        select container in "${containers[@]}"; do
+            # validate selection
+            for item in "${containers[@]}"; do
+                # find selected container
+                if [[ "${item}" == "${container}" ]]; then
+                    # break two encapsulation levels
+                    break 2;
+                fi
+            done
+        done
+    fi
+    # shellcheck disable=2181
+    if [ $? != 0 ]; then
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Execute command
+    #--------------------------------------------------
 
     _echo_info "docker stop \"${container}\"\n"
     docker stop "${container}"

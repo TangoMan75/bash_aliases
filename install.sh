@@ -165,12 +165,12 @@ EOT
 
 ## Place here commands you need executed first every time (optional)
 _before() {
-    true
+    return 0
 }
 
 ## Place here commands you need executed last every time (optional)
 _after() {
-    true
+    return 0
 }
 
 ############################################################

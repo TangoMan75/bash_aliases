@@ -18,37 +18,25 @@ function stash() {
     local show=false
 
     #--------------------------------------------------
-    # Parse arguments
+    # Parse options
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :Aaclrsh option; do
-            case "${option}" in
-                A) all=true;;
-                a) apply=true;;
-                c) clear=true;;
-                l) list=true;;
-                r) remove=true;;
-                s) show=true;;
-                h) _echo_warning 'stash\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Manage stashed files\n'
-                    _usage 2 14
-                    return 0;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :Aaclrsh option; do
+        case "${option}" in
+            A) all=true;;
+            a) apply=true;;
+            c) clear=true;;
+            l) list=true;;
+            r) remove=true;;
+            s) show=true;;
+            h) _echo_warning 'stash\n';
+                _echo_success 'description:' 2 14; _echo_primary 'Manage stashed files\n'
+                _usage 2 14
+                return 0;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------
@@ -79,16 +67,7 @@ function stash() {
     fi
 
     #--------------------------------------------------
-    # Validate argument count
-    #--------------------------------------------------
-
-    if [ "${#arguments[@]}" -ne 0 ]; then
-        _echo_danger "error: too many arguments (${#arguments[@]})\n"
-        _usage
-
-        return 1
-    fi
-
+    # Prepare command
     #--------------------------------------------------
 
     if [ "${apply}" = true ]; then

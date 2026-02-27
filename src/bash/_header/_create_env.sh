@@ -82,4 +82,7 @@ EOT
     fi
 }
 
-_create_env "${APP_USER_CONFIG_DIR}/.env"
+if [ ! -f "${APP_USER_CONFIG_DIR}/.env" ]; then
+    _create_env "${APP_USER_CONFIG_DIR}/.env"
+fi
+

@@ -123,7 +123,7 @@ function blame() {
     # Argument could be a branch name or a commit hash
     if [ -n "${commit_hash}" ]; then
         if [ "$(_commit_exists "${arguments[${LBOUND}]}")" = false ]; then
-            _echo_danger "error: Invalid commit hash : \"${OBJECT}\"\n"
+            _echo_danger "error: Invalid commit hash : \"${commit_hash}\"\n"
             _usage
             return 1
         fi

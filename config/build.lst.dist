@@ -16,15 +16,15 @@
 ./src/bash/_header/_002_global_variables.sh
 ./src/bash/_header/_colors.sh
 ./src/bash/_header/_hero.sh
-./src/bash/_header/create_env.sh
-./src/bash/_header/load_env.sh
-./src/bash/_header/set_var.sh
+./src/bash/_header/_create_env.sh
+./src/bash/_header/_load_env.sh
+./src/bash/_header/_set_var.sh
 
 # _tangoman
 ./src/bash/_tangoman/tango-help.sh
 ./src/bash/_tangoman/tango-info.sh
 ./src/bash/_tangoman/tango-reload.sh
-./src/bash/_tangoman/tango-update.sh
+#./src/bash/_tangoman/tango-update.sh
 
 # aliases
 ./src/bash/aliases/aliases.sh
@@ -38,8 +38,10 @@
 ./src/bash/docker/docker-exec.sh
 ./src/bash/docker/docker-kill.sh
 ./src/bash/docker/docker-list.sh
+./src/bash/docker/docker-remove.sh
 ./src/bash/docker/docker-restart.sh
 ./src/bash/docker/docker-shell.sh
+./src/bash/docker/docker-start.sh
 ./src/bash/docker/docker-status.sh
 ./src/bash/docker/docker-stop.sh
 
@@ -61,7 +63,6 @@
 ./src/bash/git/_pick_repository.sh
 ./src/bash/git/_print_jira_url.sh
 ./src/bash/git/add.sh
-./src/bash/git/aliases.sh
 ./src/bash/git/amend.sh
 ./src/bash/git/blame.sh
 ./src/bash/git/branch.sh

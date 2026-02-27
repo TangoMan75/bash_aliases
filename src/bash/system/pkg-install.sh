@@ -82,9 +82,11 @@ function pkg-install() {
 
     if [ "${distro}" = 'Debian' ] || [ "${distro}" = 'Kali' ]; then
         _echo_info 'sudo apt-get update\n'
+        # shellcheck disable=SC2033
         sudo apt-get update
 
         _echo_info "sudo apt-get install -y \"$1\"\n"
+        # shellcheck disable=SC2033
         sudo apt-get install -y "$1"
 
         return 0

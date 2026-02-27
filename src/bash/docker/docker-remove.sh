@@ -1,19 +1,18 @@
 #!/bin/bash
 
-alias dkl='docker-kill'   ## docker-kill alias
-alias dkill='docker-kill' ## docker-kill alias
+alias drm='docker-remove' ## docker-remove alias
 
-## Kill running containers (interactive)
-function docker-kill() {
+## Remove docker container (interactive)
+function docker-remove() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-kill (container) -a (all) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'docker-remove (container) -f (force) -h (help)\n'
     }
 
     #--------------------------------------------------
     # Variables
     #--------------------------------------------------
 
-    local all=false
+    local force=false
     local container
     local containers=()
 
@@ -26,11 +25,12 @@ function docker-kill() {
     local option
     while [ "$#" -gt 0 ]; do
         OPTIND=0
-        while getopts :ah option; do
+        while getopts :fh option; do
             case "${option}" in
-                a) all=true;;
-                h) _echo_warning 'docker-kill\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'Kill running containers (interactive)\n'
+                f) force=true;;
+                h) _echo_warning 'docker-remove\n';
+                    _echo_success 'description:' 2 14; _echo_primary 'Remove docker container (interactive)\n'
+                    _usage 2 14
                     return 0;;
                 :) _echo_danger "error: \"${OPTARG}\" requires value\n"
                     return 1;;
@@ -67,18 +67,6 @@ function docker-kill() {
     fi
 
     #--------------------------------------------------
-    # Execute short command
-    #--------------------------------------------------
-
-    if [ "${all}" = true ]; then
-        _echo_info "docker kill $(docker ps --format '{{.Names}}' | tr -s "\n" ' ')\n"
-        # shellcheck disable=SC2046
-        docker kill $(docker ps --format '{{.Names}}')
-
-        return 0
-    fi
-
-    #--------------------------------------------------
     # Get argument
     #--------------------------------------------------
 
@@ -95,7 +83,7 @@ function docker-kill() {
         done < <(docker ps --format '{{.Names}}')
 
         if [ -z "${containers[${LBOUND}]}" ]; then
-            _echo_danger 'error: No running container found\n'
+            _echo_danger 'error: No container found\n'
             return 1;
         fi
 
@@ -120,6 +108,11 @@ function docker-kill() {
     # Execute command
     #--------------------------------------------------
 
-    _echo_info "docker kill \"${container}\"\n"
-    docker kill "${container}"
+    if [ "${force}" = true ]; then
+        _echo_info "docker rm --force \"${container}\"\n"
+        docker rm --force "${container}"
+    else
+        _echo_info "docker rm \"${container}\"\n"
+        docker rm "${container}"
+    fi
 }

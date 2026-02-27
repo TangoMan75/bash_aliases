@@ -1,6 +1,7 @@
 #!/bin/bash
 
-alias dls='docker-list' ## docker-list alias
+alias dls='docker-list'   ## docker-list alias
+alias dlist='docker-list' ## docker-list alias
 
 ## List running containers
 function docker-list() {
@@ -19,30 +20,18 @@ function docker-list() {
     # Parse arguments
     #--------------------------------------------------
 
-    local arguments=()
-    local OPTARG
     local option
-    while [ "$#" -gt 0 ]; do
-        OPTIND=0
-        while getopts :adh option; do
-            case "${option}" in
-                a) all=true;;
-                d) compose=true;;
-                h) _echo_warning 'docker-list\n';
-                    _echo_success 'description:' 2 14; _echo_primary 'List running containers\n'
-                    _usage 2 14
-                    return 0;;
-                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
-                    return 1;;
-            esac
-        done
-        if [ "${OPTIND}" -gt 1 ]; then
-            shift $(( OPTIND-1 ))
-        fi
-        if [ "${OPTIND}" -eq 1 ]; then
-            arguments+=("$1")
-            shift
-        fi
+    while getopts :adh option; do
+        case "${option}" in
+            a) all=true;;
+            d) compose=true;;
+            h) _echo_warning 'docker-list\n';
+                _echo_success 'description:' 2 14; _echo_primary 'List running containers\n'
+                _usage 2 14
+                return 0;;
+            \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                return 1;;
+        esac
     done
 
     #--------------------------------------------------
@@ -51,16 +40,6 @@ function docker-list() {
 
     if [ ! -x "$(command -v docker)" ]; then
         _echo_danger 'error: docker required, enter: "sudo apt-get install -y docker" to install\n'
-        return 1
-    fi
-
-    #--------------------------------------------------
-    # Validate argument count
-    #--------------------------------------------------
-
-    if [ "${#arguments[@]}" -gt 1 ]; then
-        _echo_danger "error: too many arguments (${#arguments[@]})\n"
-        _usage 2 8
         return 1
     fi
 
@@ -94,8 +73,8 @@ function docker-list() {
     fi
 
     if [ "${all}" = true ]; then
-        _echo_info "docker ps --all --quiet --format '{{.Names}}'\n"
-        docker ps --all --quiet --format '{{.Names}}'
+        _echo_info "docker ps --all --format '{{.Names}}'\n"
+        docker ps --all --format '{{.Names}}'
 
         return 0
     fi

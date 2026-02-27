@@ -11,6 +11,7 @@ case "${OSTYPE}" in
     ;;
     'linux-androideabi')
         alias sudo='tsudo'  ## sudo alias (android)
+        # shellcheck disable=SC2032
         alias apt-get='pkg' ## apt-get alias (android)
         alias apt='pkg'     ## apt alias (android)
         

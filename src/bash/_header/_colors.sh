@@ -28,99 +28,108 @@ _ALERT_DARK='\033[1;40;37m'
 # A semantic set of colors functions
 #--------------------------------------------------
 
-# Synopsis: echo_* <STRING> [INDENTATION] [PADDING]
-#  STRING:       Text to display.
-#  INDENTATION:  Indentation level (default: 0).
-#  PADDING:      Padding length (default: 0).
-
-## Print primary (bright white text)
+## Print primary text with optional indentation and padding
 _echo_primary() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_PRIMARY}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_PRIMARY}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print secondary (bright blue text)
+## Print secondary text with optional indentation and padding
 _echo_secondary() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_SECONDARY}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_SECONDARY}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print success (bright green text)
+## Print success text with optional indentation and padding
 _echo_success() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_SUCCESS}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_SUCCESS}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print danger (red text)
+## Print danger text with optional indentation and padding
 _echo_danger() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_DANGER}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_DANGER}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print warning (orange text)
+## Print warning text with optional indentation and padding
 _echo_warning() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_WARNING}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_WARNING}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print info (bright purple text)
+## Print info text with optional indentation and padding
 _echo_info() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_INFO}" "$3" "$1" "${_DEFAULT}"
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_INFO}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print light (black text over white background)
+## Print light text with optional indentation and padding
 _echo_light() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_LIGHT}" "$3" "$1" "${_DEFAULT}"
+    # If you are printing the reset after a newline the terminal will "bleed" the last background color used into the next empty space or line
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_LIGHT}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-## Print dark (white text over black background)
+## Print dark text with optional indentation and padding
 _echo_dark() {
-    if [ $# -eq 1 ]; then set -- "$1" 0 0; elif [ $# -eq 2 ]; then set -- "$1" "$2" 0; fi
-    printf "%*b%b%-*b%b" "$2" '' "${_DARK}" "$3" "$1" "${_DEFAULT}"
+    # If you are printing the reset after a newline the terminal will "bleed" the last background color used into the next empty space or line
+    set -- "$1" "${2:-0}" "$((${3:-0}-${#1}))"
+    if [ "$3" -lt 0 ]; then set -- "$1" "$2" 0; fi
+    printf "%*s${_DARK}%b${_DEFAULT}%*s" "$2" '' "$1" "$3" ''
 }
 
-# Synopsis: alert_* <STRING>
-#  STRING:  Text to display.
+## Print error message to STDERR, prefixed with "error: "
+_echo_error() {
+    #   MESSAGE: Error message to display.
 
-## Print primary alert (bold white text over bright blue background)
-_alert_primary() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_PRIMARY}" '' "${_ALERT_PRIMARY}" "$1" "${_ALERT_PRIMARY}" '';
+    printf "${_DANGER}error: %b${_DEFAULT}" "$1" >&2
 }
 
-## Print secondary alert (bold white text over bright purple background)
+## Print primary alert
+_alert_primary()   {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_PRIMARY}" '' "${_ALERT_PRIMARY}" "$1" "${_ALERT_PRIMARY}" ''
+}
+
+## Print secondary alert
 _alert_secondary() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SECONDARY}" '' "${_ALERT_SECONDARY}" "$1" "${_ALERT_SECONDARY}" '';
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SECONDARY}" '' "${_ALERT_SECONDARY}" "$1" "${_ALERT_SECONDARY}" ''
 }
 
-## Print success alert (bold white text over bright green background)
-_alert_success() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SUCCESS}" '' "${_ALERT_SUCCESS}" "$1" "${_ALERT_SUCCESS}" '';
+## Print success alert
+_alert_success()   {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_SUCCESS}" '' "${_ALERT_SUCCESS}" "$1" "${_ALERT_SUCCESS}" ''
 }
 
-## Print danger alert (bold white text over bright red background)
-_alert_danger() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DANGER}" '' "${_ALERT_DANGER}" "$1" "${_ALERT_DANGER}" '';
+## Print danger alert
+_alert_danger()    {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DANGER}" '' "${_ALERT_DANGER}" "$1" "${_ALERT_DANGER}" ''
 }
 
-## Print warning alert (bold white text over bright orange background)
-_alert_warning() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_WARNING}" '' "${_ALERT_WARNING}" "$1" "${_ALERT_WARNING}" '';
+## Print warning alert
+_alert_warning()   {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_WARNING}" '' "${_ALERT_WARNING}" "$1" "${_ALERT_WARNING}" ''
 }
 
-## Print info alert (bold white text over bright blue background)
-_alert_info() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_INFO}" '' "${_ALERT_INFO}" "$1" "${_ALERT_INFO}" '';
+## Print info alert
+_alert_info()      {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_INFO}" '' "${_ALERT_INFO}" "$1" "${_ALERT_INFO}" ''
 }
 
-## Print light alert (black text over white background)
-_alert_light() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_LIGHT}" '' "${_ALERT_LIGHT}" "$1" "${_ALERT_LIGHT}" '';
+## Print light alert
+_alert_light()      {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_LIGHT}" '' "${_ALERT_LIGHT}" "$1" "${_ALERT_LIGHT}" ''
 }
 
-## Print dark alert (bold white text over black background)
-_alert_dark() {
-    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DARK}" '' "${_ALERT_DARK}" "$1" "${_ALERT_DARK}" '';
+## Print dark alert
+_alert_dark()      {
+    printf "${_EOL}%b%64s${_EOL}%b %-63s${_EOL}%b%64s${_EOL}\n" "${_ALERT_DARK}" '' "${_ALERT_DARK}" "$1" "${_ALERT_DARK}" ''
 }
 

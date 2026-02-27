@@ -7,7 +7,7 @@ function _list_ides() {
     #--------------------------------------------------
 
     local ide
-    local ides=(atom code nano phpstorm pycharm pycharm-community subl vim webstorm)
+    local ides=(antigravity atom clion code codium cursor intellij-idea-community micro nano nvim phpstorm pycharm pycharm-community subl vim webstorm windsurf zed)
     local result=''
 
     #--------------------------------------------------

@@ -28,6 +28,9 @@ function tango-update() {
     # Variables
     #--------------------------------------------------
 
+    local APP_INSTALL_DIR="${HOME}/.TangoMan75"
+    local APP_REPOSITORY="https://github.com/TangoMan75/bash_aliases"
+
     local latest_version
     local local_version=()
     local remote_version=()
@@ -43,7 +46,7 @@ function tango-update() {
     while getopts :h option; do
         case "${option}" in
             h) _echo_warning 'tango-update\n';
-                _echo_success 'description:' 2 14; _echo_primary "Update \"${APP_AUTHOR}\" \"${APP_NAME}\"\n"
+                _echo_success 'description:' 2 14; _echo_primary "Update \"TangoMan75\" \"bash_aliases\"\n"
                 _usage 2 14
                 return 0;;
             \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
@@ -55,9 +58,9 @@ function tango-update() {
     # Get repository latest tag
     #--------------------------------------------------
 
-    latest_version="$(curl --silent GET "https://api.github.com/repos/${APP_AUTHOR}/${APP_NAME}/tags" | grep -m 1 '"name":' | sed -E 's/.*"[vV]?([^"]+)".*/\1/')"
+    latest_version="$(curl --silent GET "https://api.github.com/repos/TangoMan75/bash_aliases/tags" | grep -m 1 '"name":' | sed -E 's/.*"[vV]?([^"]+)".*/\1/')"
     if [ -z "${latest_version}" ]; then
-        _echo_danger "error: could not check ${APP_AUTHOR} \"${APP_NAME}\" latest available version\n"
+        _echo_danger "error: could not check TangoMan75 \"bash_aliases\" latest available version\n"
         return 1
     fi
 
@@ -118,7 +121,7 @@ function tango-update() {
     # Check install folder and clone repository
     if [ ! -d "${APP_INSTALL_DIR}" ]; then
         # Set install dir to default
-        APP_INSTALL_DIR=~/.${APP_AUTHOR}/${APP_NAME}
+        APP_INSTALL_DIR="${HOME}/.TangoMan75/bash_aliases"
 
         _echo_warning "\"${APP_INSTALL_DIR}\" not found, cloning source repository\n"
 

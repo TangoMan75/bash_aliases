@@ -1,6 +1,7 @@
 #!/bin/bash
 
-alias dst='docker-status' ## docker-status alias
+alias dst='docker-status'     ## docker-status alias
+alias dstatus='docker-status' ## docker-status alias
 
 ## List images, volumes and network information
 function docker-status() {

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-## Encode string froml URL format
+## Encode string to URL format
 function urlencode() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urlencode -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'urlencode [string] -h (help)\n'
     }
 
     #--------------------------------------------------

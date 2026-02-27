@@ -3,7 +3,7 @@
 ## Switch default ssh id
 function switch-default-ssh() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'switch-default-id -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'switch-default-ssh -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -25,7 +25,7 @@ function switch-default-ssh() {
     local option
     while getopts :h option; do
         case "${option}" in
-            h) _echo_warning 'switch-default-id\n';
+            h) _echo_warning 'switch-default-ssh\n';
                 _echo_success 'description:' 2 14; _echo_primary 'Switch default ssh id\n'
                 _usage 2 14
                 return 0;;

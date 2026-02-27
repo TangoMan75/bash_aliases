@@ -162,12 +162,12 @@ build() {
     # Set values
     #--------------------------------------------------
 
-    _set_var APP_NAME            "${APP_NAME}"            "${DESTINATION}"
-    _set_var APP_AUTHOR          "${APP_AUTHOR}"          "${DESTINATION}"
+    # _set_var APP_NAME            "${APP_NAME}"            "${DESTINATION}"
+    # _set_var APP_AUTHOR          "${APP_AUTHOR}"          "${DESTINATION}"
     _set_var APP_VERSION         "${APP_VERSION}"         "${DESTINATION}"
-    _set_var APP_REPOSITORY      "${APP_REPOSITORY}"      "${DESTINATION}"
-    _set_var APP_INSTALL_DIR     "${APP_INSTALL_DIR}"     "${DESTINATION}"
-    _set_var APP_USER_CONFIG_DIR "${APP_USER_CONFIG_DIR}" "${DESTINATION}"
+    # _set_var APP_REPOSITORY      "${APP_REPOSITORY}"      "${DESTINATION}"
+    # _set_var APP_INSTALL_DIR     "${APP_INSTALL_DIR}"     "${DESTINATION}"
+    # _set_var APP_USER_CONFIG_DIR "${APP_USER_CONFIG_DIR}" "${DESTINATION}"
 
     #--------------------------------------------------
 
@@ -197,24 +197,24 @@ init() {
     fi
 
     # get app version from latest git tag
-    APP_NAME="$(git remote get-url origin | sed -E 's/(http:\/\/|https:\/\/|git@)//' | sed -E 's/\.git$//' | tr ':' '/' | cut -d/ -f3)"
-    APP_SERVER="$(git remote get-url origin | sed -E 's/(http:\/\/|https:\/\/|git@)//' | sed -E 's/\.git$//' | tr ':' '/' | cut -d/ -f1)"
-    APP_AUTHOR="$(git remote get-url origin | sed -E 's/(http:\/\/|https:\/\/|git@)//' | sed -E 's/\.git$//' | tr ':' '/' | cut -d/ -f2)"
+    # APP_NAME="$(git remote get-url origin | sed -E 's/(http:\/\/|https:\/\/|git@)//' | sed -E 's/\.git$//' | tr ':' '/' | cut -d/ -f3)"
+    # APP_SERVER="$(git remote get-url origin | sed -E 's/(http:\/\/|https:\/\/|git@)//' | sed -E 's/\.git$//' | tr ':' '/' | cut -d/ -f1)"
+    # APP_AUTHOR="$(git remote get-url origin | sed -E 's/(http:\/\/|https:\/\/|git@)//' | sed -E 's/\.git$//' | tr ':' '/' | cut -d/ -f2)"
     APP_VERSION="$(git describe --exact-match --abbrev=0 2>/dev/null || echo '0.1.0')"
-    APP_REPOSITORY="https://${APP_SERVER}/${APP_AUTHOR}/${APP_NAME}"
-    APP_INSTALL_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
-    APP_USER_CONFIG_DIR=~/.${APP_AUTHOR}/${APP_NAME}/config
+    # APP_REPOSITORY="https://${APP_SERVER}/${APP_AUTHOR}/${APP_NAME}"
+    # APP_INSTALL_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
+    # APP_USER_CONFIG_DIR=~/.${APP_AUTHOR}/${APP_NAME}/config
 
     #--------------------------------------------------
     # Set values
     #--------------------------------------------------
 
-    _set_var APP_NAME            "${APP_NAME}"            "${ENV_FILE}"
-    _set_var APP_AUTHOR          "${APP_AUTHOR}"          "${ENV_FILE}"
+    # _set_var APP_NAME            "${APP_NAME}"            "${ENV_FILE}"
+    # _set_var APP_AUTHOR          "${APP_AUTHOR}"          "${ENV_FILE}"
     _set_var APP_VERSION         "${APP_VERSION}"         "${ENV_FILE}"
-    _set_var APP_REPOSITORY      "${APP_REPOSITORY}"      "${ENV_FILE}"
-    _set_var APP_INSTALL_DIR     "${APP_INSTALL_DIR}"     "${ENV_FILE}"
-    _set_var APP_USER_CONFIG_DIR "${APP_USER_CONFIG_DIR}" "${ENV_FILE}"
+    # _set_var APP_REPOSITORY      "${APP_REPOSITORY}"      "${ENV_FILE}"
+    # _set_var APP_INSTALL_DIR     "${APP_INSTALL_DIR}"     "${ENV_FILE}"
+    # _set_var APP_USER_CONFIG_DIR "${APP_USER_CONFIG_DIR}" "${ENV_FILE}"
 }
 
 ## Load .env
@@ -227,12 +227,12 @@ load_env() {
     # shellcheck source=/dev/null
     . "${ENV_FILE}"
 
-    echo_success 'APP_NAME:' 2 16;            echo_primary "${APP_NAME}\n"
-    echo_success 'APP_AUTHOR:' 2 16;          echo_primary "${APP_AUTHOR}\n"
+    # echo_success 'APP_NAME:' 2 16;            echo_primary "${APP_NAME}\n"
+    # echo_success 'APP_AUTHOR:' 2 16;          echo_primary "${APP_AUTHOR}\n"
     echo_success 'APP_VERSION:' 2 16;         echo_primary "${APP_VERSION}\n"
-    echo_success 'APP_REPOSITORY:' 2 16;      echo_primary "${APP_REPOSITORY}\n"
-    echo_success 'APP_INSTALL_DIR:' 2 16;     echo_primary "${APP_INSTALL_DIR}\n"
-    echo_success 'APP_USER_CONFIG_DIR:' 2 16; echo_primary "${APP_USER_CONFIG_DIR}\n"
+    # echo_success 'APP_REPOSITORY:' 2 16;      echo_primary "${APP_REPOSITORY}\n"
+    # echo_success 'APP_INSTALL_DIR:' 2 16;     echo_primary "${APP_INSTALL_DIR}\n"
+    # echo_success 'APP_USER_CONFIG_DIR:' 2 16; echo_primary "${APP_USER_CONFIG_DIR}\n"
 }
 
 ## Copy .bash_aliases to user home folder
