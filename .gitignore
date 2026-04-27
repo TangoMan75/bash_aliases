@@ -1,0 +1,3 @@
+/config/*
+!/config/.env.dist
+!/config/build.lst.dist
