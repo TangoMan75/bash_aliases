@@ -1,5 +1,7 @@
 #!/bin/bash
 
+alias gcommit='conventional-commit' ## Create conventional commit message
+
 # Create conventional commit message
 function conventional-commit() {
     function _usage() {

@@ -570,9 +570,25 @@ Write changes to local repository
 
 reate conventional branch name
 
+### 🤡 gbranch
+
+Create conventional branch name
+
+```bash
+'conventional-branch'
+```
+
 ### 🤖 conventional-commit
 
 reate conventional commit message
+
+### 🤡 gcommit
+
+Create conventional commit message
+
+```bash
+'conventional-commit'
+```
 
 ### 🤖 delete-github-deployments
 

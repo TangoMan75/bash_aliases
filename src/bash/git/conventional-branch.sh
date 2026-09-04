@@ -1,9 +1,11 @@
 #!/bin/bash
 
+alias gbranch='conventional-branch' ## Create conventional branch name
+
 # Create conventional branch name
 function conventional-branch() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'conventional-branch (branch name) -i (interactive) -r (rename) -t [type] -T [ticket] -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'conventional-branch (branch name) -r (rename) -t [type] -T [ticket] -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -13,7 +15,6 @@ function conventional-branch() {
     local default_subject
     local default_ticket
     local default_type
-    local interactive=false
     local rename=false
     local subject
     local ticket
@@ -29,12 +30,11 @@ function conventional-branch() {
     local option
     while [ "$#" -gt 0 ]; do
         OPTIND=0
-        while getopts :irt:T:h option; do
+        while getopts :rt:T:h option; do
             case "${option}" in
-                i) interactive=true;;
-                r) rename=true;;
                 T) default_ticket="${OPTARG}";;
                 t) default_type="${OPTARG}";;
+                r) rename=true;;
                 h) _echo_warning 'conventional-branch\n';
                     _echo_success 'description:' 2 14; _echo_primary 'Create conventional branch name\n'
                     _usage 2 14
@@ -86,27 +86,15 @@ function conventional-branch() {
     # Parse argument
     #--------------------------------------------------
 
-    default_type="$(_parse_branch_type "${arguments[${LBOUND}]}")"
-    default_ticket="$(_parse_branch_ticket "${arguments[${LBOUND}]}")"
-    default_subject="$(_parse_branch_subject "${arguments[${LBOUND}]}")"
-
-    #--------------------------------------------------
-    # Find default values
-    #--------------------------------------------------
-
-    if [ "${rename}" = true ]; then
-        if [ -z "${default_type}" ]; then
-            default_type=$(_get_branch_type)
-        fi
-
-        if [ -z "${default_ticket}" ]; then
-            default_ticket=$(_get_branch_ticket)
-        fi
-
-        if [ -z "${default_subject}" ]; then
-            default_subject=$(_get_branch_subject)
-        fi
+    if [ "${#arguments[@]}" -eq 1 ]; then
+        type="$(_parse_branch_type "${arguments[${LBOUND}]}")"
+        ticket="$(_parse_branch_ticket "${arguments[${LBOUND}]}")"
+        subject="$(_parse_branch_subject "${arguments[${LBOUND}]}")"
     fi
+
+    #--------------------------------------------------
+    # Set default values
+    #--------------------------------------------------
 
     if [ -z "${default_subject}" ]; then
         default_subject="$(date '+%Y%m%d_%H%M%S')"
@@ -116,7 +104,7 @@ function conventional-branch() {
     # User prompts
     #--------------------------------------------------
 
-    if [ "${interactive}" = true ]; then
+    if [ -z "${type}" ]; then
         PS3=$(_echo_success 'Please select type : ')
         select type in "${valid_types[@]}"; do
             if [[ "${REPLY}" =~ ^[0-9]+$ ]] && [ "${REPLY}" -gt 0 ] && [ "${REPLY}" -le "${#valid_types[@]}" ]; then
@@ -125,14 +113,18 @@ function conventional-branch() {
         done
 
         if [ "${type}" = 'other' ]; then
-            _echo_success "Please enter type : [${default_type}] "
+            _echo_success 'Please enter type : '
             read -r type
         fi
+    fi
 
+    if [ -z "${subject}" ]; then
         _echo_success "Please enter subject: [${default_subject}] "
         read -r subject
+    fi
 
-        _echo_success "Please enter ticket number (optional): [${default_ticket}] "
+    if [ -z "${ticket}" ]; then
+        _echo_success 'Please enter ticket number (optional): '
         read -r ticket
     fi
 
@@ -140,16 +132,8 @@ function conventional-branch() {
     # Set default values
     #--------------------------------------------------
 
-    if [ -z "${type}" ]; then
-        type="${default_type}"
-    fi
-
     if [ -z "${subject}" ]; then
         subject="${default_subject}"
-    fi
-
-    if [ -z "${ticket}" ]; then
-        ticket="${default_ticket}"
     fi
 
     #--------------------------------------------------
@@ -164,7 +148,7 @@ function conventional-branch() {
     # Validate values
     #--------------------------------------------------
 
-    if [[ ! "${ticket}" =~ ^[A-Z]+-[0-9]+$ ]]; then
+    if [ -n $(parse_branch_ticket "${ticket}") ]; then
         ticket=''
     fi
 

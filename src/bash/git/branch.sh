@@ -5,7 +5,7 @@ alias gb='branch' ## Create, checkout, rename or delete git branch
 ## Create, checkout, rename or delete git branch
 function branch() {
     function _usage() {
-        _echo_success 'usage:' "$1" "$2"; _echo_primary 'branch (name) -F [file type filter] -i (interactive) -l (list) -a (list all) -f (fetch) -p (prune) -d (delete) -D (delete remote) -r (rename) -u (set upstream) -A (all, fetch and prune) -h (help)\n'
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'branch (name) -F [filter branches] -i (interactive) -l (list) -a (list all) -f (fetch) -p (prune) -d (delete) -D (delete remote) -r (rename) -u (set upstream) -A (all, fetch and prune) -h (help)\n'
     }
 
     #--------------------------------------------------
@@ -133,9 +133,10 @@ function branch() {
     # rename current branch
     if [ "${rename}" = true ]; then
         if [ "${interactive_rename}" = true ]; then
-            conventional-branch -i -r "${branch}"
-        else
             conventional-branch -r "${branch}"
+        else
+            _echo_info "git branch -m \"${branch}\"\n"
+            git branch -m "${branch}"
         fi
     fi
 
@@ -208,9 +209,10 @@ function branch() {
             if [ -z "$(git --no-pager branch -r --list "origin/${branch}")" ]; then
                 _alert_success 'Creating new local branch'
                 if [ "${interactive_rename}" = true ]; then
-                    conventional-branch -i "${branch}"
-                else
                     conventional-branch "${branch}"
+                else
+                    _echo_info "git checkout -b\"${branch}\"\n"
+                    git checkout -b"${branch}"
                 fi
             else
                 _alert_warning 'Fetching branch from remote'
