@@ -1,0 +1,189 @@
+#!/bin/bash
+
+alias gbranch='conventional-branch' ## Create conventional branch name
+
+# Create conventional branch name
+function conventional-branch() {
+    function _usage() {
+        _echo_success 'usage:' "$1" "$2"; _echo_primary 'conventional-branch (branch name) -r (rename) -t [type] -T [ticket] -h (help)\n'
+    }
+
+    #--------------------------------------------------
+    # Variables
+    #--------------------------------------------------
+
+    local default_subject
+    local default_ticket
+    local default_type
+    local rename=false
+    local subject
+    local ticket
+    local type
+    local valid_types=(build chore ci docs feat fix perf refactor style test other)
+
+    #--------------------------------------------------
+    # Parse arguments
+    #--------------------------------------------------
+
+    local arguments=()
+    local OPTARG
+    local option
+    while [ "$#" -gt 0 ]; do
+        OPTIND=0
+        while getopts :rt:T:h option; do
+            case "${option}" in
+                T) default_ticket="${OPTARG}";;
+                t) default_type="${OPTARG}";;
+                r) rename=true;;
+                h) _echo_warning 'conventional-branch\n';
+                    _echo_success 'description:' 2 14; _echo_primary 'Create conventional branch name\n'
+                    _usage 2 14
+                    return 0;;
+                :) _echo_danger "error: \"${OPTARG}\" requires value\n"
+                    return 1;;
+                \?) _echo_danger "error: invalid option \"${OPTARG}\"\n"
+                    return 1;;
+            esac
+        done
+        if [ "${OPTIND}" -gt 1 ]; then
+            shift $(( OPTIND-1 ))
+        fi
+        if [ "${OPTIND}" -eq 1 ]; then
+            arguments+=("$1")
+            shift
+        fi
+    done
+
+    #--------------------------------------------------
+    # Check git installation
+    #--------------------------------------------------
+
+    if [ ! -x "$(command -v git)" ]; then
+        _echo_danger 'error: git required, enter: "sudo apt-get install -y git" to install\n'
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # check git directory
+    #--------------------------------------------------
+
+    if [ -z "$(git rev-parse --show-toplevel 2>/dev/null)" ]; then
+        _echo_danger 'error: Not a git repository (or any of the parent directories)\n'
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Validate argument count
+    #--------------------------------------------------
+
+    if [ "${#arguments[@]}" -gt 1 ]; then
+        _echo_danger "error: too many arguments (${#arguments[@]})\n"
+        _usage 2 8
+        return 1
+    fi
+
+    #--------------------------------------------------
+    # Parse argument
+    #--------------------------------------------------
+
+    if [ "${#arguments[@]}" -eq 1 ]; then
+        type="$(_parse_branch_type "${arguments[${LBOUND}]}")"
+        ticket="$(_parse_branch_ticket "${arguments[${LBOUND}]}")"
+        subject="$(_parse_branch_subject "${arguments[${LBOUND}]}")"
+    fi
+
+    #--------------------------------------------------
+    # Set default values
+    #--------------------------------------------------
+
+    if [ -z "${default_subject}" ]; then
+        default_subject="$(date '+%Y%m%d_%H%M%S')"
+    fi
+
+    #--------------------------------------------------
+    # User prompts
+    #--------------------------------------------------
+
+    if [ -z "${type}" ]; then
+        if [ -n "${default_type}" ]; then
+            type="${default_type}"
+        else
+            PS3=$(_echo_success 'Please select type : ')
+            select type in "${valid_types[@]}"; do
+                if [[ "${REPLY}" =~ ^[0-9]+$ ]] && [ "${REPLY}" -gt 0 ] && [ "${REPLY}" -le "${#valid_types[@]}" ]; then
+                    break 2;
+                fi
+            done
+
+            if [ "${type}" = 'other' ]; then
+                _echo_success 'Please enter type : '
+                read -r type
+            fi
+        fi
+    fi
+
+    if [ -z "${subject}" ]; then
+        _echo_success "Please enter subject: [${default_subject}] "
+        read -r subject
+    fi
+
+    if [ -z "${ticket}" ]; then
+        if [ -n "${default_ticket}" ]; then
+            ticket="${default_ticket}"
+        else
+            _echo_success 'Please enter ticket number (optional): '
+            read -r ticket
+        fi
+    fi
+
+    #--------------------------------------------------
+    # Set default values
+    #--------------------------------------------------
+
+    if [ -z "${subject}" ]; then
+        subject="${default_subject}"
+    fi
+
+    #--------------------------------------------------
+    # Sanitize values
+    #--------------------------------------------------
+
+    type="$(_format_type "${type}")"
+    ticket="$(_format_ticket "${ticket}")"
+    subject="$(_format_branch_subject "${subject}")"
+
+    #--------------------------------------------------
+    # Validate values
+    #--------------------------------------------------
+
+    if [ -n "$(parse_branch_ticket "${ticket}")" ]; then
+        ticket=''
+    fi
+
+    #--------------------------------------------------
+    # Format values
+    #--------------------------------------------------
+
+    if [ -n "${type}" ]; then
+        type="${type}/"
+    fi
+
+    if [ -n "${ticket}" ]; then
+        ticket="${ticket}/"
+    fi
+
+    #--------------------------------------------------
+    # Execute command
+    #--------------------------------------------------
+
+    if [ "${rename}" = true ]; then
+        # -m, --move : Move/rename a branch and the corresponding reflog.
+        _echo_info "git branch -m ${type}${ticket}${subject}\n"
+        eval "git branch -m \"${type}${ticket}${subject}\""
+
+        return 0
+    fi
+
+    _echo_info "git checkout -b ${type}${ticket}${subject}\n"
+    eval "git checkout -b \"${type}${ticket}${subject}\""
+}
